@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fotodesk/core/theme/custom_theme.dart';
+import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 
 import 'core/di/injector.dart';
@@ -15,8 +16,15 @@ void main() async {
     supportedLocales: const [Locale('en'), Locale('de')],
     path: 'assets/localization',
     fallbackLocale: const Locale('en'),
-    child: BlocProvider(
-      create: (context) => AuthCubit(),
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AdminManagerCubit(),
+        ),
+      ],
       child: const Fotodesk(),
     ),
   ));

@@ -14,14 +14,14 @@ class Navbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _sideNavbar(),
+        _sideNavbar(context),
         Expanded(
           child: Stack(
             children: [
               mainContent,
               Align(
                 alignment: Alignment.topRight,
-                child: _topRightNavbar(),
+                child: _topRightNavbar(context),
               ),
             ],
           ),
@@ -30,7 +30,7 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _sideNavbar() {
+  Widget _sideNavbar(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
         left: 8.w,
@@ -38,7 +38,7 @@ class Navbar extends StatelessWidget {
         bottom: 8.h,
       ),
       decoration: BoxDecoration(
-        color: const Color(0xFF4D8076),
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(16.r),
       ),
       width: 115.w,
@@ -51,7 +51,7 @@ class Navbar extends StatelessWidget {
             style: TextStyle(
               fontSize: 17.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.black38,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
           SizedBox(height: 50.h),
@@ -91,7 +91,7 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _topRightNavbar() {
+  Widget _topRightNavbar(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10.h, right: 10.h),
       child: Row(
@@ -106,12 +106,12 @@ class Navbar extends StatelessWidget {
                 iconSize: 24.r,
               ),
               Positioned(
-                top: 10.h,
-                right: 10.w,
+                top: 5.h,
+                right: 5.w,
                 child: Container(
                   padding: EdgeInsets.all(2.w),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4D8076),
+                    color: Theme.of(context).colorScheme.onBackground,
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                   constraints: BoxConstraints(
@@ -119,9 +119,9 @@ class Navbar extends StatelessWidget {
                     minHeight: 12.h,
                   ),
                   child: Text(
-                    '!', // This can be replaced with a count of unread notifications
+                    '1', // This can be replaced with a count of unread notifications
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.background,
                       fontSize: 8.sp,
                     ),
                     textAlign: TextAlign.center,
@@ -140,7 +140,7 @@ class Navbar extends StatelessWidget {
           ),
           CircleAvatar(
             radius: 30.r,
-            backgroundColor: const Color(0xFF4D8076),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             child: Icon(
               Icons.person,
               size: 16.r,
