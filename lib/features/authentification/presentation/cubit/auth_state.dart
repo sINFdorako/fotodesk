@@ -1,6 +1,12 @@
 part of 'auth_cubit.dart';
 
-@immutable
-sealed class AuthState {}
+@freezed
+class AuthState with _$AuthState {
+  const factory AuthState({
+    required bool isLight,
+  }) = _AuthState;
 
-final class AuthInitial extends AuthState {}
+  factory AuthState.initial() {
+    return const AuthState(isLight: true);
+  }
+}

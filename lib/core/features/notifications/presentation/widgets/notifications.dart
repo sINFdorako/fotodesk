@@ -27,11 +27,15 @@ mixin ElegantNotificationMixin {
     }
 
     return ElegantNotification(
+      background: Theme.of(context).colorScheme.background,
       showProgressIndicator: false,
       width: 360,
       notificationPosition: NotificationPosition.bottomRight,
       animation: AnimationType.fromRight,
-      description: Text(description),
+      description: Text(
+        description,
+        style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+      ),
       onDismiss: () {},
       icon: Icon(
         iconData,

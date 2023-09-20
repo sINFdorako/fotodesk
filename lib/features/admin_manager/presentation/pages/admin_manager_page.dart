@@ -37,7 +37,7 @@ class _AdminManagerPageState extends State<AdminManagerPage> {
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Colors.white,
                             ),
                           ),
                         ],
