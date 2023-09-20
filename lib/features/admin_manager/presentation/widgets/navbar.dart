@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
+import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
+import 'package:fotodesk/features/gallery_administration/presentation/pages/gallery_administration_page.dart';
 
 import 'navbar_button.dart';
 
@@ -16,13 +20,10 @@ class Navbar extends StatelessWidget {
       children: [
         _sideNavbar(context),
         Expanded(
-          child: Stack(
+          child: Column(
             children: [
-              mainContent,
-              Align(
-                alignment: Alignment.topRight,
-                child: _topRightNavbar(context),
-              ),
+              _topNavbar(context),
+              Expanded(child: mainContent),
             ],
           ),
         ),
@@ -32,27 +33,20 @@ class Navbar extends StatelessWidget {
 
   Widget _sideNavbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
-        left: 8.w,
-        top: 8.h,
-        bottom: 8.h,
-      ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(16.h),
+            topRight: Radius.circular(16.h)),
       ),
-      width: 115.w,
+      width: 100.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(height: 16.h),
-          Text(
-            "LOGO",
-            style: TextStyle(
-              fontSize: 17.sp,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
+          const Icon(
+            Icons.center_focus_strong,
+            color: Colors.white,
           ),
           SizedBox(height: 50.h),
           const NavBarButton(
@@ -91,9 +85,103 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _topRightNavbar(BuildContext context) {
+  Widget _topNavbar(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h, right: 10.h),
+        height: 75.h,
+        decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onSecondary,
+            borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(16),
+                topLeft: Radius.circular(16))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: _getNavbarContent(context)),
+            SizedBox(
+              width: 25.h,
+            ),
+            const VerticalDivider(),
+            SizedBox(
+              width: 25.h,
+            ),
+            _profile(context),
+          ],
+        ));
+  }
+
+  Widget _getNavbarContent(BuildContext context) {
+    final selected = context.watch<AdminManagerCubit>().state.selectedType;
+
+    Widget content;
+    switch (selected) {
+      case NavBarItem.home:
+        content = Align(
+          key: const ValueKey('home'),
+          alignment: Alignment.centerLeft,
+          child: _navBarTitle('Home Page', context, const ValueKey('home')),
+        );
+        break;
+      case NavBarItem.gallery:
+        content = Align(
+          key: const ValueKey('galleryTitle'),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              _navBarTitle('Gallery Administration', context,
+                  const ValueKey('galleryTitle')),
+              Expanded(child: Container()),
+              CustomButton(
+                  label: 'Neue Kategory',
+                  onPressed: () {
+                    addNewCategory(context);
+                  }),
+            ],
+          ),
+        );
+        break;
+      default:
+        content = Align(
+          key: const ValueKey('other'),
+          alignment: Alignment.centerLeft,
+          child:
+              _navBarTitle('Something other', context, const ValueKey('other')),
+        );
+        break;
+    }
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -1), // Starts from above (outside of view)
+            end: const Offset(0, 0), // Ends at its original position
+          ).animate(animation),
+          child: child,
+        );
+      },
+      child: content,
+    );
+  }
+
+  Widget _navBarTitle(String title, BuildContext context, [Key? key]) {
+    return Container(
+      margin: EdgeInsets.only(left: 20.w),
+      child: Text(
+        key: key,
+        title,
+        style: TextStyle(
+          fontSize: 20.h,
+          fontWeight: FontWeight.w400,
+          color: Theme.of(context).colorScheme.onBackground.withOpacity(.85),
+        ),
+      ),
+    );
+  }
+
+  Widget _profile(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 25.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -139,7 +227,7 @@ class Navbar extends StatelessWidget {
             width: 8,
           ),
           CircleAvatar(
-            radius: 30.r,
+            radius: 22.5.r,
             backgroundColor: Theme.of(context).colorScheme.primary,
             child: Icon(
               Icons.person,

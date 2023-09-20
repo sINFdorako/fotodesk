@@ -23,10 +23,10 @@ class NavBarButton extends StatefulWidget {
 }
 
 class NavBarButtonState extends State<NavBarButton> {
+  bool isHovering = false;
+
   @override
   Widget build(BuildContext context) {
-    bool isHovering = false;
-
     final adminManagerCubit = context.read<AdminManagerCubit>();
     final selectedType = context.watch<AdminManagerCubit>().state.selectedType;
 
@@ -37,7 +37,7 @@ class NavBarButtonState extends State<NavBarButton> {
       child: MouseRegion(
         onEnter: (_) => setState(() => isHovering = true),
         onExit: (_) => setState(() => isHovering = false),
-        child: GestureDetector(
+        child: InkWell(
           onTap: () {
             switch (widget.navBarItem) {
               case NavBarItem.home:
@@ -69,13 +69,8 @@ class NavBarButtonState extends State<NavBarButton> {
                 height: 60, // fixed height
                 decoration: BoxDecoration(
                   color: isHovering || isSelected
-                      ? Colors.white
-                      : null, // Check both conditions
-                  border: Border.all(
-                    color: isHovering || isSelected
-                        ? Colors.white
-                        : Colors.transparent, // Check both conditions
-                  ),
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : null,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20),
@@ -85,7 +80,7 @@ class NavBarButtonState extends State<NavBarButton> {
                   child: Icon(
                     widget.icon,
                     color: isHovering || isSelected
-                        ? Colors.blueGrey
+                        ? Theme.of(context).colorScheme.primary
                         : Colors.white, // Check both conditions
                     size: 30,
                   ),

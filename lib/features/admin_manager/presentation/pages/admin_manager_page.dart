@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/navbar.dart';
+import 'package:fotodesk/features/gallery_administration/presentation/pages/gallery_administration_page.dart';
 
 class AdminManagerPage extends StatefulWidget {
   const AdminManagerPage({super.key});
@@ -33,7 +34,7 @@ class _AdminManagerPageState extends State<AdminManagerPage> {
       case NavBarItem.home:
         return _home();
       case NavBarItem.gallery:
-        return const Placeholder();
+        return const GalleryAdministrationPage();
       default:
         return Container();
     }
@@ -42,16 +43,14 @@ class _AdminManagerPageState extends State<AdminManagerPage> {
   Widget _home() {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(
-            height: 50,
-          ),
           Text(
             'Welcome to Fotodesk!',
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onBackground,
+              color: Theme.of(context).colorScheme.onBackground.withOpacity(.7),
             ),
           ),
         ],

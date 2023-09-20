@@ -134,7 +134,6 @@ class _LoginPageState extends State<LoginPage> {
                 // Sign Up Section
                 Expanded(
                   child: Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                             begin: Alignment.topLeft,
@@ -144,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                               Theme.of(context).colorScheme.primary
                             ]),
                         borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(16),
-                            bottomRight: Radius.circular(16))),
+                            topLeft: Radius.circular(16),
+                            bottomLeft: Radius.circular(16))),
                     child: CustomPaint(
                       painter: BackgroundShapesPainter(),
                       child: Stack(
@@ -181,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         hintText: hintText,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
     );
