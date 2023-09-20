@@ -19,7 +19,7 @@ class NetworkDataSource {
 
       if (response.statusCode == 200) {
         // Store token in shared preferences
-        final token = response.data['userTokenKey'];
+        final token = response.data['token'];
         await _localStorageService.saveUserToken(token);
 
         return User(email: email);

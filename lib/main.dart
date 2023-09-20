@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fotodesk/features/authentification/presentation/pages/login_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'core/di/injector.dart';
+import 'core/router/router.gr.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,31 +21,68 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Photo Desk'),
-    );
+    final appRouter = getIt<AppRouter>();
+
+    return MaterialApp.router(
+        routerDelegate: appRouter.delegate(),
+        routeInformationParser: appRouter.defaultRouteParser(),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        title: 'Fotodesk',
+        theme: buildTheme()
+        // Color(0xFFC4FCEF), Color(0xFF4D8076)
+        );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  ThemeData buildTheme() {
+    Color primaryColor = const Color(0xFF4D8076);
+    Color secondaryColor = const Color.fromARGB(255, 157, 214, 202);
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+    ColorScheme colorScheme = ColorScheme.fromSeed(
+      primary: primaryColor,
+      secondary: secondaryColor,
+      seedColor: primaryColor,
+    );
 
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: LoginPage());
+    return ThemeData(
+      primaryColor: primaryColor,
+      primaryColorLight: secondaryColor,
+      primaryColorDark: primaryColor,
+      scaffoldBackgroundColor: colorScheme.background,
+      appBarTheme: AppBarTheme(
+        color: colorScheme.primary,
+        iconTheme: IconThemeData(color: colorScheme.onPrimary),
+      ),
+      iconTheme: IconThemeData(color: primaryColor),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: primaryColor,
+        foregroundColor: colorScheme.onPrimary,
+      ),
+      textTheme: TextTheme(
+        displayLarge: TextStyle(color: colorScheme.onBackground),
+        displayMedium: TextStyle(color: colorScheme.onBackground),
+        displaySmall: TextStyle(color: colorScheme.onBackground),
+        headlineMedium: TextStyle(color: colorScheme.onBackground),
+        headlineSmall: TextStyle(color: colorScheme.onBackground),
+        titleLarge: TextStyle(color: colorScheme.onPrimary),
+        titleMedium: TextStyle(color: colorScheme.onBackground),
+        bodyLarge: TextStyle(color: colorScheme.onBackground),
+        bodyMedium: TextStyle(color: colorScheme.onBackground),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor),
+        ),
+      ),
+      useMaterial3: true,
+      colorScheme: colorScheme.copyWith(error: Colors.redAccent),
+    );
   }
 }
