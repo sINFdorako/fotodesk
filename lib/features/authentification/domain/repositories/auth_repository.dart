@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failures.dart';
-import '../entities/user.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, User>> loginUser(String email, String password);
+  Future<Either<Failure, void>> loginUser(String email, String password);
+  Future<Either<Failure, void>> registerUser(String email, String password);
 }

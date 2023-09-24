@@ -3,11 +3,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user.freezed.dart';
 part 'user.g.dart';
 
-@freezed
-@JsonSerializable()
-class User with _$User {
-  const factory User({required String email}) = _User;
+enum UserRole { user, superadmin }
 
-  // This factory constructor is used to create a new User instance from a JSON map.
+@freezed
+class User with _$User {
+  const factory User({
+    required String email,
+    required String password,
+    int? id,
+    UserRole? role,
+  }) = _User;
+
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

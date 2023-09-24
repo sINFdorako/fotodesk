@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                 final loginUser = getIt<LoginUser>();
                                 final response =
-                                    await loginUser.call(email, password);
+                                    await loginUser.execute(email, password);
 
                                 // Checking if the response contains a successful user login
                                 response.fold(
