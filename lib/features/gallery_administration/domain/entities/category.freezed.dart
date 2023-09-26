@@ -21,12 +21,13 @@ Category _$CategoryFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Category {
   int? get id => throw _privateConstructorUsedError;
-  int get userId => throw _privateConstructorUsedError;
+  int? get userId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  DateTime get creationDate => throw _privateConstructorUsedError;
-  DateTime get lastModifiedDate => throw _privateConstructorUsedError;
+  DateTime? get creationDate => throw _privateConstructorUsedError;
+  DateTime? get lastModifiedDate => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  List<Image>? get images => throw _privateConstructorUsedError;
+  int? get size => throw _privateConstructorUsedError;
+  List<GalleryImage>? get images => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,12 +42,13 @@ abstract class $CategoryCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      int userId,
+      int? userId,
       String name,
-      DateTime creationDate,
-      DateTime lastModifiedDate,
+      DateTime? creationDate,
+      DateTime? lastModifiedDate,
       String? description,
-      List<Image>? images});
+      int? size,
+      List<GalleryImage>? images});
 }
 
 /// @nodoc
@@ -63,11 +65,12 @@ class _$CategoryCopyWithImpl<$Res, $Val extends Category>
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? name = null,
-    Object? creationDate = null,
-    Object? lastModifiedDate = null,
+    Object? creationDate = freezed,
+    Object? lastModifiedDate = freezed,
     Object? description = freezed,
+    Object? size = freezed,
     Object? images = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,30 +78,34 @@ class _$CategoryCopyWithImpl<$Res, $Val extends Category>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      creationDate: null == creationDate
+      creationDate: freezed == creationDate
           ? _value.creationDate
           : creationDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      lastModifiedDate: null == lastModifiedDate
+              as DateTime?,
+      lastModifiedDate: freezed == lastModifiedDate
           ? _value.lastModifiedDate
           : lastModifiedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      size: freezed == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int?,
       images: freezed == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
-              as List<Image>?,
+              as List<GalleryImage>?,
     ) as $Val);
   }
 }
@@ -112,12 +119,13 @@ abstract class _$$_CategoryCopyWith<$Res> implements $CategoryCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      int userId,
+      int? userId,
       String name,
-      DateTime creationDate,
-      DateTime lastModifiedDate,
+      DateTime? creationDate,
+      DateTime? lastModifiedDate,
       String? description,
-      List<Image>? images});
+      int? size,
+      List<GalleryImage>? images});
 }
 
 /// @nodoc
@@ -132,11 +140,12 @@ class __$$_CategoryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? name = null,
-    Object? creationDate = null,
-    Object? lastModifiedDate = null,
+    Object? creationDate = freezed,
+    Object? lastModifiedDate = freezed,
     Object? description = freezed,
+    Object? size = freezed,
     Object? images = freezed,
   }) {
     return _then(_$_Category(
@@ -144,30 +153,34 @@ class __$$_CategoryCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      creationDate: null == creationDate
+      creationDate: freezed == creationDate
           ? _value.creationDate
           : creationDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      lastModifiedDate: null == lastModifiedDate
+              as DateTime?,
+      lastModifiedDate: freezed == lastModifiedDate
           ? _value.lastModifiedDate
           : lastModifiedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      size: freezed == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int?,
       images: freezed == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
-              as List<Image>?,
+              as List<GalleryImage>?,
     ));
   }
 }
@@ -177,12 +190,13 @@ class __$$_CategoryCopyWithImpl<$Res>
 class _$_Category implements _Category {
   const _$_Category(
       {this.id,
-      required this.userId,
+      this.userId,
       required this.name,
-      required this.creationDate,
-      required this.lastModifiedDate,
+      this.creationDate,
+      this.lastModifiedDate,
       this.description,
-      final List<Image>? images})
+      this.size,
+      final List<GalleryImage>? images})
       : _images = images;
 
   factory _$_Category.fromJson(Map<String, dynamic> json) =>
@@ -191,18 +205,20 @@ class _$_Category implements _Category {
   @override
   final int? id;
   @override
-  final int userId;
+  final int? userId;
   @override
   final String name;
   @override
-  final DateTime creationDate;
+  final DateTime? creationDate;
   @override
-  final DateTime lastModifiedDate;
+  final DateTime? lastModifiedDate;
   @override
   final String? description;
-  final List<Image>? _images;
   @override
-  List<Image>? get images {
+  final int? size;
+  final List<GalleryImage>? _images;
+  @override
+  List<GalleryImage>? get images {
     final value = _images;
     if (value == null) return null;
     if (_images is EqualUnmodifiableListView) return _images;
@@ -212,7 +228,7 @@ class _$_Category implements _Category {
 
   @override
   String toString() {
-    return 'Category(id: $id, userId: $userId, name: $name, creationDate: $creationDate, lastModifiedDate: $lastModifiedDate, description: $description, images: $images)';
+    return 'Category(id: $id, userId: $userId, name: $name, creationDate: $creationDate, lastModifiedDate: $lastModifiedDate, description: $description, size: $size, images: $images)';
   }
 
   @override
@@ -229,6 +245,7 @@ class _$_Category implements _Category {
                 other.lastModifiedDate == lastModifiedDate) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.size, size) || other.size == size) &&
             const DeepCollectionEquality().equals(other._images, _images));
   }
 
@@ -242,6 +259,7 @@ class _$_Category implements _Category {
       creationDate,
       lastModifiedDate,
       description,
+      size,
       const DeepCollectionEquality().hash(_images));
 
   @JsonKey(ignore: true)
@@ -261,29 +279,32 @@ class _$_Category implements _Category {
 abstract class _Category implements Category {
   const factory _Category(
       {final int? id,
-      required final int userId,
+      final int? userId,
       required final String name,
-      required final DateTime creationDate,
-      required final DateTime lastModifiedDate,
+      final DateTime? creationDate,
+      final DateTime? lastModifiedDate,
       final String? description,
-      final List<Image>? images}) = _$_Category;
+      final int? size,
+      final List<GalleryImage>? images}) = _$_Category;
 
   factory _Category.fromJson(Map<String, dynamic> json) = _$_Category.fromJson;
 
   @override
   int? get id;
   @override
-  int get userId;
+  int? get userId;
   @override
   String get name;
   @override
-  DateTime get creationDate;
+  DateTime? get creationDate;
   @override
-  DateTime get lastModifiedDate;
+  DateTime? get lastModifiedDate;
   @override
   String? get description;
   @override
-  List<Image>? get images;
+  int? get size;
+  @override
+  List<GalleryImage>? get images;
   @override
   @JsonKey(ignore: true)
   _$$_CategoryCopyWith<_$_Category> get copyWith =>

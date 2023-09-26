@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/core/errors/failures.dart';
 
 import '../../domain/entities/category.dart';
-import '../../domain/entities/image.dart';
+import '../../domain/entities/gallery_image.dart';
 import '../../domain/repositories/gallery_admin_repository.dart';
 import '../datasources/network_data_source_ga.dart';
 
@@ -34,9 +36,9 @@ class GalleryAdminRepositoryImpl implements GalleryAdminRepository {
   }
 
   @override
-  Future<Either<Failure, void>> createCategory() async {
+  Future<Either<Failure, void>> createCategory(Category category) async {
     try {
-      await networkDataSourceGA.createCategory();
+      await networkDataSourceGA.createCategory(category);
       return const Right(unit);
     } catch (error) {
       return Left(ServerFailure());
@@ -44,9 +46,10 @@ class GalleryAdminRepositoryImpl implements GalleryAdminRepository {
   }
 
   @override
-  Future<Either<Failure, List<Image>>> getAllImages() async {
+  Future<Either<Failure, List<GalleryImage>>> getAllImages() async {
     try {
-      final List<Image> images = await networkDataSourceGA.getAllImages();
+      final List<GalleryImage> images =
+          await networkDataSourceGA.getAllImages();
       return Right(images);
     } catch (error) {
       return Left(ServerFailure());
@@ -54,20 +57,22 @@ class GalleryAdminRepositoryImpl implements GalleryAdminRepository {
   }
 
   @override
-  Future<Either<Failure, Image>> getImageByCategoryId(int categoryId) async {
+  Future<Either<Failure, List<GalleryImage>>> getImageByCategoryId(
+      int categoryId) async {
     try {
-      final Image image =
+      final List<GalleryImage> images =
           await networkDataSourceGA.getImageByCategoryId(categoryId);
-      return Right(image);
+      return Right(images);
     } catch (error) {
       return Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> createImage(int categoryId) async {
+  Future<Either<Failure, void>> createImage(
+      int categoryId, File imageFile) async {
     try {
-      await networkDataSourceGA.createImage(categoryId);
+      await networkDataSourceGA.createImage(categoryId, imageFile);
       return const Right(unit);
     } catch (error) {
       return Left(ServerFailure());

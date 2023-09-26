@@ -4,14 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fotodesk/core/theme/custom_theme.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
+import 'package:fotodesk/features/gallery_administration/data/datasources/network_data_source_ga.dart';
+import 'package:fotodesk/features/gallery_administration/data/repositories/gallery_admin_repository_impl.dart';
 
 import 'core/di/injector.dart';
 import 'core/router/router.gr.dart';
+import 'features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   setupLocator();
+
+  //GalleryAdmin init
+  final networkDataSourceGA = NetworkDataSourceGA();
+  final galleryAdminRepository =
+      GalleryAdminRepositoryImpl(networkDataSourceGA);
+
   runApp(EasyLocalization(
     supportedLocales: const [Locale('en'), Locale('de')],
     path: 'assets/localization',
@@ -24,6 +33,9 @@ void main() async {
         BlocProvider(
           create: (context) => AdminManagerCubit(),
         ),
+        BlocProvider(
+          create: (context) => GalleryAdminCubit(galleryAdminRepository),
+        )
       ],
       child: const Fotodesk(),
     ),

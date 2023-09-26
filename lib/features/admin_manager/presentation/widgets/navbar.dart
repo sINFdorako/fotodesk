@@ -5,6 +5,9 @@ import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dar
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/pages/gallery_administration_page.dart';
 
+import '../../../../core/features/ui/presentation/widgets/animations/switch_in_switch_out.dart';
+import '../../../gallery_administration/domain/entities/category.dart';
+import '../../../gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 import 'navbar_button.dart';
 
 enum NavBarItem { home, gallery, customers, calendar, help, logout }
@@ -111,42 +114,18 @@ class Navbar extends StatelessWidget {
 
   Widget _getNavbarContent(BuildContext context) {
     final selected = context.watch<AdminManagerCubit>().state.selectedType;
+    final categoryMarked =
+        context.watch<GalleryAdminCubit>().state.selectedCategoryMarked;
+    final categoryClicked =
+        context.watch<GalleryAdminCubit>().state.selectedCategoryClicked;
 
     Widget content;
-    switch (selected) {
-      case NavBarItem.home:
-        content = Align(
-          key: const ValueKey('home'),
-          alignment: Alignment.centerLeft,
-          child: _navBarTitle('Home Page', context, const ValueKey('home')),
-        );
-        break;
-      case NavBarItem.gallery:
-        content = Align(
-          key: const ValueKey('galleryTitle'),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              _navBarTitle('Gallery Administration', context,
-                  const ValueKey('galleryTitle')),
-              Expanded(child: Container()),
-              CustomButton(
-                  label: 'Neue Kategory',
-                  onPressed: () {
-                    addNewCategory(context);
-                  }),
-            ],
-          ),
-        );
-        break;
-      default:
-        content = Align(
-          key: const ValueKey('other'),
-          alignment: Alignment.centerLeft,
-          child:
-              _navBarTitle('Something other', context, const ValueKey('other')),
-        );
-        break;
+    if (selected == NavBarItem.home) {
+      content = _homeContent(context);
+    } else if (selected == NavBarItem.gallery) {
+      content = _galleryContent(categoryMarked, categoryClicked, context);
+    } else {
+      content = _defaultContent(context);
     }
 
     return AnimatedSwitcher(
@@ -164,18 +143,180 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _navBarTitle(String title, BuildContext context, [Key? key]) {
+  Widget _homeContent(BuildContext context) {
+    return Align(
+      key: const ValueKey('home'),
+      alignment: Alignment.centerLeft,
+      child: _navBarTitle('Home Page', context),
+    );
+  }
+
+  Widget _galleryContent(Category? categoryMarked, Category? categoryClicked,
+      BuildContext context) {
+    List<Widget> children = [
+      SwitchInSwitchOut(
+          key: categoryClicked != null
+              ? ValueKey('galleryTitle/${categoryClicked.name}')
+              : const ValueKey('galleryTitle'),
+          child: _navBarTitle(
+            'Gallerie Administration',
+            context,
+            categoryClicked: categoryClicked,
+          )),
+      Expanded(child: Container())
+    ];
+
+    if (categoryMarked != null) {
+      children.addAll([
+        SwitchInSwitchOut(
+          key: const ValueKey('deleteButton'),
+          child: CustomButton(
+            label: 'Kategorie löschen',
+            onPressed: () => {},
+          ),
+        ),
+        const SizedBox(width: 16),
+        SwitchInSwitchOut(
+          key: const ValueKey('editButton'),
+          child: CustomButton(
+            label: 'Kategorie bearbeiten',
+            onPressed: () => {},
+          ),
+        ),
+      ]);
+    } else if (categoryClicked != null) {
+      children.add(
+        SwitchInSwitchOut(
+          key: const ValueKey('uploadButton'),
+          child: CustomButton(
+            label: 'Bild hochladen',
+            onPressed: () => {},
+          ),
+        ),
+      );
+    } else {
+      children.add(
+        SwitchInSwitchOut(
+          key: const ValueKey('newCategoryButton'),
+          child: CustomButton(
+            label: 'Neue Kategorie',
+            onPressed: () => addNewCategory(context),
+          ),
+        ),
+      );
+    }
+
+    return Align(
+      key: const ValueKey('galleryTitle'),
+      alignment: Alignment.centerLeft,
+      child: Row(children: children),
+    );
+  }
+
+  Widget _animatedButton(String label, VoidCallback onPressed, ValueKey key) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -1),
+            end: const Offset(0, 0),
+          ).animate(animation),
+          child: child,
+        );
+      },
+      child: CustomButton(
+        key: key,
+        label: label,
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  Widget _defaultContent(BuildContext context) {
+    return Align(
+      key: const ValueKey('other'),
+      alignment: Alignment.centerLeft,
+      child: _navBarTitle('Something other', context),
+    );
+  }
+
+  Widget _navBarTitle(String title, BuildContext context,
+      {Key? key, Category? categoryClicked}) {
     return Container(
       margin: EdgeInsets.only(left: 20.w),
-      child: Text(
-        key: key,
-        title,
-        style: TextStyle(
-          fontSize: 20.h,
-          fontWeight: FontWeight.w400,
-          color: Theme.of(context).colorScheme.onBackground.withOpacity(.85),
-        ),
-      ),
+      child: categoryClicked != null
+          ? Row(
+              children: [
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () => context
+                          .read<GalleryAdminCubit>()
+                          .deSetCategoryAsClicked(categoryClicked),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 10.w),
+                          Icon(Icons.chevron_left,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onBackground
+                                  .withOpacity(.75)),
+                          SizedBox(width: 10.w),
+                          Text(
+                            title,
+                            key: key,
+                            style: TextStyle(
+                              fontSize: 15.h,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onBackground
+                                  .withOpacity(.75),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      ' / ${categoryClicked.name}',
+                      style: TextStyle(
+                        fontSize: 15.h,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onBackground
+                            .withOpacity(.75),
+                      ),
+                    ),
+                  ],
+                ),
+                // Breadcrumb
+              ],
+            )
+          : Row(
+              children: [
+                SizedBox(width: 10.w),
+                Icon(Icons.chevron_left,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.2)),
+                SizedBox(width: 10.w),
+                Text(
+                  title,
+                  key: key,
+                  style: TextStyle(
+                    fontSize: 15.h,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(.75),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 

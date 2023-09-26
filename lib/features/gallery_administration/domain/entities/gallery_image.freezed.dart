@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'image.dart';
+part of 'gallery_image.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,22 +14,22 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Image _$ImageFromJson(Map<String, dynamic> json) {
-  return _Image.fromJson(json);
+GalleryImage _$GalleryImageFromJson(Map<String, dynamic> json) {
+  return _GalleryImage.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Image {
+mixin _$GalleryImage {
   int? get id => throw _privateConstructorUsedError;
-  int get userId => throw _privateConstructorUsedError;
-  int get categoryId => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
-  String get filename => throw _privateConstructorUsedError;
-  String get originalFilename => throw _privateConstructorUsedError;
-  int get fileSize => throw _privateConstructorUsedError;
-  String get mimeType => throw _privateConstructorUsedError;
-  DateTime get uploadDate => throw _privateConstructorUsedError;
-  DateTime get lastModifiedDate => throw _privateConstructorUsedError;
+  int? get userId => throw _privateConstructorUsedError;
+  int? get categoryId => throw _privateConstructorUsedError;
+  String? get url => throw _privateConstructorUsedError;
+  String? get filename => throw _privateConstructorUsedError;
+  String? get originalFilename => throw _privateConstructorUsedError;
+  int? get fileSize => throw _privateConstructorUsedError;
+  String? get mimeType => throw _privateConstructorUsedError;
+  DateTime? get uploadDate => throw _privateConstructorUsedError;
+  DateTime? get lastModifiedDate => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   List<String>? get tags => throw _privateConstructorUsedError; // EXIF-Daten
@@ -46,25 +46,27 @@ mixin _$Image {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ImageCopyWith<Image> get copyWith => throw _privateConstructorUsedError;
+  $GalleryImageCopyWith<GalleryImage> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ImageCopyWith<$Res> {
-  factory $ImageCopyWith(Image value, $Res Function(Image) then) =
-      _$ImageCopyWithImpl<$Res, Image>;
+abstract class $GalleryImageCopyWith<$Res> {
+  factory $GalleryImageCopyWith(
+          GalleryImage value, $Res Function(GalleryImage) then) =
+      _$GalleryImageCopyWithImpl<$Res, GalleryImage>;
   @useResult
   $Res call(
       {int? id,
-      int userId,
-      int categoryId,
-      String url,
-      String filename,
-      String originalFilename,
-      int fileSize,
-      String mimeType,
-      DateTime uploadDate,
-      DateTime lastModifiedDate,
+      int? userId,
+      int? categoryId,
+      String? url,
+      String? filename,
+      String? originalFilename,
+      int? fileSize,
+      String? mimeType,
+      DateTime? uploadDate,
+      DateTime? lastModifiedDate,
       String? title,
       String? description,
       List<String>? tags,
@@ -81,9 +83,9 @@ abstract class $ImageCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ImageCopyWithImpl<$Res, $Val extends Image>
-    implements $ImageCopyWith<$Res> {
-  _$ImageCopyWithImpl(this._value, this._then);
+class _$GalleryImageCopyWithImpl<$Res, $Val extends GalleryImage>
+    implements $GalleryImageCopyWith<$Res> {
+  _$GalleryImageCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -94,15 +96,15 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = null,
-    Object? categoryId = null,
-    Object? url = null,
-    Object? filename = null,
-    Object? originalFilename = null,
-    Object? fileSize = null,
-    Object? mimeType = null,
-    Object? uploadDate = null,
-    Object? lastModifiedDate = null,
+    Object? userId = freezed,
+    Object? categoryId = freezed,
+    Object? url = freezed,
+    Object? filename = freezed,
+    Object? originalFilename = freezed,
+    Object? fileSize = freezed,
+    Object? mimeType = freezed,
+    Object? uploadDate = freezed,
+    Object? lastModifiedDate = freezed,
     Object? title = freezed,
     Object? description = freezed,
     Object? tags = freezed,
@@ -122,42 +124,42 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as int,
-      categoryId: null == categoryId
+              as int?,
+      categoryId: freezed == categoryId
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      url: null == url
+              as int?,
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      filename: null == filename
+              as String?,
+      filename: freezed == filename
           ? _value.filename
           : filename // ignore: cast_nullable_to_non_nullable
-              as String,
-      originalFilename: null == originalFilename
+              as String?,
+      originalFilename: freezed == originalFilename
           ? _value.originalFilename
           : originalFilename // ignore: cast_nullable_to_non_nullable
-              as String,
-      fileSize: null == fileSize
+              as String?,
+      fileSize: freezed == fileSize
           ? _value.fileSize
           : fileSize // ignore: cast_nullable_to_non_nullable
-              as int,
-      mimeType: null == mimeType
+              as int?,
+      mimeType: freezed == mimeType
           ? _value.mimeType
           : mimeType // ignore: cast_nullable_to_non_nullable
-              as String,
-      uploadDate: null == uploadDate
+              as String?,
+      uploadDate: freezed == uploadDate
           ? _value.uploadDate
           : uploadDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      lastModifiedDate: null == lastModifiedDate
+              as DateTime?,
+      lastModifiedDate: freezed == lastModifiedDate
           ? _value.lastModifiedDate
           : lastModifiedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -215,22 +217,24 @@ class _$ImageCopyWithImpl<$Res, $Val extends Image>
 }
 
 /// @nodoc
-abstract class _$$_ImageCopyWith<$Res> implements $ImageCopyWith<$Res> {
-  factory _$$_ImageCopyWith(_$_Image value, $Res Function(_$_Image) then) =
-      __$$_ImageCopyWithImpl<$Res>;
+abstract class _$$_GalleryImageCopyWith<$Res>
+    implements $GalleryImageCopyWith<$Res> {
+  factory _$$_GalleryImageCopyWith(
+          _$_GalleryImage value, $Res Function(_$_GalleryImage) then) =
+      __$$_GalleryImageCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {int? id,
-      int userId,
-      int categoryId,
-      String url,
-      String filename,
-      String originalFilename,
-      int fileSize,
-      String mimeType,
-      DateTime uploadDate,
-      DateTime lastModifiedDate,
+      int? userId,
+      int? categoryId,
+      String? url,
+      String? filename,
+      String? originalFilename,
+      int? fileSize,
+      String? mimeType,
+      DateTime? uploadDate,
+      DateTime? lastModifiedDate,
       String? title,
       String? description,
       List<String>? tags,
@@ -247,24 +251,26 @@ abstract class _$$_ImageCopyWith<$Res> implements $ImageCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ImageCopyWithImpl<$Res> extends _$ImageCopyWithImpl<$Res, _$_Image>
-    implements _$$_ImageCopyWith<$Res> {
-  __$$_ImageCopyWithImpl(_$_Image _value, $Res Function(_$_Image) _then)
+class __$$_GalleryImageCopyWithImpl<$Res>
+    extends _$GalleryImageCopyWithImpl<$Res, _$_GalleryImage>
+    implements _$$_GalleryImageCopyWith<$Res> {
+  __$$_GalleryImageCopyWithImpl(
+      _$_GalleryImage _value, $Res Function(_$_GalleryImage) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? userId = null,
-    Object? categoryId = null,
-    Object? url = null,
-    Object? filename = null,
-    Object? originalFilename = null,
-    Object? fileSize = null,
-    Object? mimeType = null,
-    Object? uploadDate = null,
-    Object? lastModifiedDate = null,
+    Object? userId = freezed,
+    Object? categoryId = freezed,
+    Object? url = freezed,
+    Object? filename = freezed,
+    Object? originalFilename = freezed,
+    Object? fileSize = freezed,
+    Object? mimeType = freezed,
+    Object? uploadDate = freezed,
+    Object? lastModifiedDate = freezed,
     Object? title = freezed,
     Object? description = freezed,
     Object? tags = freezed,
@@ -279,47 +285,47 @@ class __$$_ImageCopyWithImpl<$Res> extends _$ImageCopyWithImpl<$Res, _$_Image>
     Object? copyright = freezed,
     Object? creationDate = freezed,
   }) {
-    return _then(_$_Image(
+    return _then(_$_GalleryImage(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as int,
-      categoryId: null == categoryId
+              as int?,
+      categoryId: freezed == categoryId
           ? _value.categoryId
           : categoryId // ignore: cast_nullable_to_non_nullable
-              as int,
-      url: null == url
+              as int?,
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      filename: null == filename
+              as String?,
+      filename: freezed == filename
           ? _value.filename
           : filename // ignore: cast_nullable_to_non_nullable
-              as String,
-      originalFilename: null == originalFilename
+              as String?,
+      originalFilename: freezed == originalFilename
           ? _value.originalFilename
           : originalFilename // ignore: cast_nullable_to_non_nullable
-              as String,
-      fileSize: null == fileSize
+              as String?,
+      fileSize: freezed == fileSize
           ? _value.fileSize
           : fileSize // ignore: cast_nullable_to_non_nullable
-              as int,
-      mimeType: null == mimeType
+              as int?,
+      mimeType: freezed == mimeType
           ? _value.mimeType
           : mimeType // ignore: cast_nullable_to_non_nullable
-              as String,
-      uploadDate: null == uploadDate
+              as String?,
+      uploadDate: freezed == uploadDate
           ? _value.uploadDate
           : uploadDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      lastModifiedDate: null == lastModifiedDate
+              as DateTime?,
+      lastModifiedDate: freezed == lastModifiedDate
           ? _value.lastModifiedDate
           : lastModifiedDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -378,18 +384,18 @@ class __$$_ImageCopyWithImpl<$Res> extends _$ImageCopyWithImpl<$Res, _$_Image>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Image implements _Image {
-  const _$_Image(
+class _$_GalleryImage implements _GalleryImage {
+  const _$_GalleryImage(
       {this.id,
-      required this.userId,
-      required this.categoryId,
-      required this.url,
-      required this.filename,
-      required this.originalFilename,
-      required this.fileSize,
-      required this.mimeType,
-      required this.uploadDate,
-      required this.lastModifiedDate,
+      this.userId,
+      this.categoryId,
+      this.url,
+      this.filename,
+      this.originalFilename,
+      this.fileSize,
+      this.mimeType,
+      this.uploadDate,
+      this.lastModifiedDate,
       this.title,
       this.description,
       final List<String>? tags,
@@ -405,29 +411,29 @@ class _$_Image implements _Image {
       this.creationDate})
       : _tags = tags;
 
-  factory _$_Image.fromJson(Map<String, dynamic> json) =>
-      _$$_ImageFromJson(json);
+  factory _$_GalleryImage.fromJson(Map<String, dynamic> json) =>
+      _$$_GalleryImageFromJson(json);
 
   @override
   final int? id;
   @override
-  final int userId;
+  final int? userId;
   @override
-  final int categoryId;
+  final int? categoryId;
   @override
-  final String url;
+  final String? url;
   @override
-  final String filename;
+  final String? filename;
   @override
-  final String originalFilename;
+  final String? originalFilename;
   @override
-  final int fileSize;
+  final int? fileSize;
   @override
-  final String mimeType;
+  final String? mimeType;
   @override
-  final DateTime uploadDate;
+  final DateTime? uploadDate;
   @override
-  final DateTime lastModifiedDate;
+  final DateTime? lastModifiedDate;
   @override
   final String? title;
   @override
@@ -467,14 +473,14 @@ class _$_Image implements _Image {
 
   @override
   String toString() {
-    return 'Image(id: $id, userId: $userId, categoryId: $categoryId, url: $url, filename: $filename, originalFilename: $originalFilename, fileSize: $fileSize, mimeType: $mimeType, uploadDate: $uploadDate, lastModifiedDate: $lastModifiedDate, title: $title, description: $description, tags: $tags, cameraMake: $cameraMake, cameraModel: $cameraModel, exposureTime: $exposureTime, aperture: $aperture, iso: $iso, focalLength: $focalLength, flashUsed: $flashUsed, creator: $creator, copyright: $copyright, creationDate: $creationDate)';
+    return 'GalleryImage(id: $id, userId: $userId, categoryId: $categoryId, url: $url, filename: $filename, originalFilename: $originalFilename, fileSize: $fileSize, mimeType: $mimeType, uploadDate: $uploadDate, lastModifiedDate: $lastModifiedDate, title: $title, description: $description, tags: $tags, cameraMake: $cameraMake, cameraModel: $cameraModel, exposureTime: $exposureTime, aperture: $aperture, iso: $iso, focalLength: $focalLength, flashUsed: $flashUsed, creator: $creator, copyright: $copyright, creationDate: $creationDate)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Image &&
+            other is _$_GalleryImage &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.categoryId, categoryId) ||
@@ -548,29 +554,29 @@ class _$_Image implements _Image {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ImageCopyWith<_$_Image> get copyWith =>
-      __$$_ImageCopyWithImpl<_$_Image>(this, _$identity);
+  _$$_GalleryImageCopyWith<_$_GalleryImage> get copyWith =>
+      __$$_GalleryImageCopyWithImpl<_$_GalleryImage>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ImageToJson(
+    return _$$_GalleryImageToJson(
       this,
     );
   }
 }
 
-abstract class _Image implements Image {
-  const factory _Image(
+abstract class _GalleryImage implements GalleryImage {
+  const factory _GalleryImage(
       {final int? id,
-      required final int userId,
-      required final int categoryId,
-      required final String url,
-      required final String filename,
-      required final String originalFilename,
-      required final int fileSize,
-      required final String mimeType,
-      required final DateTime uploadDate,
-      required final DateTime lastModifiedDate,
+      final int? userId,
+      final int? categoryId,
+      final String? url,
+      final String? filename,
+      final String? originalFilename,
+      final int? fileSize,
+      final String? mimeType,
+      final DateTime? uploadDate,
+      final DateTime? lastModifiedDate,
       final String? title,
       final String? description,
       final List<String>? tags,
@@ -583,30 +589,31 @@ abstract class _Image implements Image {
       final bool? flashUsed,
       final String? creator,
       final String? copyright,
-      final DateTime? creationDate}) = _$_Image;
+      final DateTime? creationDate}) = _$_GalleryImage;
 
-  factory _Image.fromJson(Map<String, dynamic> json) = _$_Image.fromJson;
+  factory _GalleryImage.fromJson(Map<String, dynamic> json) =
+      _$_GalleryImage.fromJson;
 
   @override
   int? get id;
   @override
-  int get userId;
+  int? get userId;
   @override
-  int get categoryId;
+  int? get categoryId;
   @override
-  String get url;
+  String? get url;
   @override
-  String get filename;
+  String? get filename;
   @override
-  String get originalFilename;
+  String? get originalFilename;
   @override
-  int get fileSize;
+  int? get fileSize;
   @override
-  String get mimeType;
+  String? get mimeType;
   @override
-  DateTime get uploadDate;
+  DateTime? get uploadDate;
   @override
-  DateTime get lastModifiedDate;
+  DateTime? get lastModifiedDate;
   @override
   String? get title;
   @override
@@ -635,6 +642,6 @@ abstract class _Image implements Image {
   DateTime? get creationDate;
   @override
   @JsonKey(ignore: true)
-  _$$_ImageCopyWith<_$_Image> get copyWith =>
+  _$$_GalleryImageCopyWith<_$_GalleryImage> get copyWith =>
       throw _privateConstructorUsedError;
 }

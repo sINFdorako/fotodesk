@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fotodesk/core/network/dio_client.dart';
 import '../../domain/entities/category.dart';
-import '../../domain/entities/image.dart';
+import '../../domain/entities/gallery_image.dart';
 
 class NetworkDataSourceGA {
   final Dio _dio = DioClient().fotoDeskApi;
@@ -41,9 +43,10 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<void> createCategory() async {
+  Future<void> createCategory(Category category) async {
     try {
-      final response = await _dio.get('/category/create');
+      final response =
+          await _dio.post('/category/create', data: category.toJson());
 
       if (response.statusCode == 200) {
       } else {
@@ -54,14 +57,15 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<Image> getImageByCategoryId(int categoryId) async {
+  Future<List<GalleryImage>> getImageByCategoryId(int categoryId) async {
     try {
       final response = await _dio.get('/image/uploads/$categoryId');
-
       if (response.statusCode == 200) {
-        final dynamic rawData = response.data;
-        final Image image = Image.fromJson(rawData);
-        return image;
+        final List<dynamic> rawData = response.data as List;
+        final List<GalleryImage> images = rawData
+            .map((imageData) => GalleryImage.fromJson(imageData))
+            .toList();
+        return images;
       } else {
         throw Exception('Failed to load image');
       }
@@ -70,14 +74,15 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<List<Image>> getAllImages() async {
+  Future<List<GalleryImage>> getAllImages() async {
     try {
       final response = await _dio.get('image/uploads');
 
       if (response.statusCode == 200) {
         final List<dynamic> rawData = response.data as List;
-        final List<Image> images =
-            rawData.map((imageData) => Image.fromJson(imageData)).toList();
+        final List<GalleryImage> images = rawData
+            .map((imageData) => GalleryImage.fromJson(imageData))
+            .toList();
 
         return images;
       } else {
@@ -88,9 +93,14 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<void> createImage(int categoryId) async {
+  Future<void> createImage(int categoryId, File imageFile) async {
     try {
-      final response = await _dio.post('image/uploads/$categoryId');
+      FormData formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(imageFile.path),
+      });
+
+      final response =
+          await _dio.post('image/uploads/$categoryId', data: formData);
 
       if (response.statusCode == 200) {
       } else {

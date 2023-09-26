@@ -1,22 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'image.dart';
+part of 'gallery_image.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Image _$$_ImageFromJson(Map<String, dynamic> json) => _$_Image(
+_$_GalleryImage _$$_GalleryImageFromJson(Map<String, dynamic> json) =>
+    _$_GalleryImage(
       id: json['id'] as int?,
-      userId: json['userId'] as int,
-      categoryId: json['categoryId'] as int,
-      url: json['url'] as String,
-      filename: json['filename'] as String,
-      originalFilename: json['originalFilename'] as String,
-      fileSize: json['fileSize'] as int,
-      mimeType: json['mimeType'] as String,
-      uploadDate: DateTime.parse(json['uploadDate'] as String),
-      lastModifiedDate: DateTime.parse(json['lastModifiedDate'] as String),
+      userId: json['userId'] as int?,
+      categoryId: json['categoryId'] as int?,
+      url: json['url'] as String?,
+      filename: json['filename'] as String?,
+      originalFilename: json['originalFilename'] as String?,
+      fileSize: json['fileSize'] as int?,
+      mimeType: json['mimeType'] as String?,
+      uploadDate: json['uploadDate'] == null
+          ? null
+          : DateTime.parse(json['uploadDate'] as String),
+      lastModifiedDate: json['lastModifiedDate'] == null
+          ? null
+          : DateTime.parse(json['lastModifiedDate'] as String),
       title: json['title'] as String?,
       description: json['description'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -34,7 +39,8 @@ _$_Image _$$_ImageFromJson(Map<String, dynamic> json) => _$_Image(
           : DateTime.parse(json['creationDate'] as String),
     );
 
-Map<String, dynamic> _$$_ImageToJson(_$_Image instance) => <String, dynamic>{
+Map<String, dynamic> _$$_GalleryImageToJson(_$_GalleryImage instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
       'categoryId': instance.categoryId,
@@ -43,8 +49,8 @@ Map<String, dynamic> _$$_ImageToJson(_$_Image instance) => <String, dynamic>{
       'originalFilename': instance.originalFilename,
       'fileSize': instance.fileSize,
       'mimeType': instance.mimeType,
-      'uploadDate': instance.uploadDate.toIso8601String(),
-      'lastModifiedDate': instance.lastModifiedDate.toIso8601String(),
+      'uploadDate': instance.uploadDate?.toIso8601String(),
+      'lastModifiedDate': instance.lastModifiedDate?.toIso8601String(),
       'title': instance.title,
       'description': instance.description,
       'tags': instance.tags,
