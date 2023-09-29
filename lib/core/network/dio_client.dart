@@ -13,7 +13,7 @@ class DioClient {
         connectTimeout: const Duration(seconds: 10), // 10s
         receiveTimeout: const Duration(seconds: 7), // 7s
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
       ),
     );

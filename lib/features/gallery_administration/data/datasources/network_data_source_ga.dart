@@ -93,21 +93,69 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<void> createImage(int categoryId, File imageFile) async {
+  Future<void> createImages(int categoryId, List<File> imageFiles) async {
     try {
+      List<MultipartFile> multiPartFiles = [];
+
+      for (final file in imageFiles) {
+        var multipartFile = await MultipartFile.fromFile(file.path);
+        multiPartFiles.add(multipartFile);
+      }
+
       FormData formData = FormData.fromMap({
-        "image": await MultipartFile.fromFile(imageFile.path),
+        "images[]": multiPartFiles,
       });
 
       final response =
           await _dio.post('/image/uploads/$categoryId', data: formData);
 
       if (response.statusCode == 200) {
+        // Do something on success if needed
       } else {
         throw Exception('Failed to create image');
       }
     } catch (error) {
       throw Exception('Failed to create image: $error');
+    }
+  }
+
+  Future<void> updateCategory(Category category, int categoryId) async {
+    try {
+      final response =
+          await _dio.put('/category/$categoryId', data: category.toJson());
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update category');
+      }
+    } catch (error) {
+      throw Exception('Failed to update category: $error');
+    }
+  }
+
+  Future<void> deleteImages(List<int> imageIds) async {
+    try {
+      final response = await _dio.delete('/image', data: {
+        "imageIds": imageIds,
+      });
+      if (response.statusCode != 204) {
+        // Assuming 204 No Content is the expected success response code for deletions
+        throw Exception('Failed to delete images');
+      }
+    } catch (error) {
+      throw Exception('Failed to delete images: $error');
+    }
+  }
+
+  Future<void> deleteCategories(List<int> categoryIds) async {
+    try {
+      final response = await _dio.delete('/category', data: {
+        "categoryIds": categoryIds,
+      });
+      if (response.statusCode != 204) {
+        // Assuming 204 No Content is the expected success response code for deletions
+        throw Exception('Failed to delete categories');
+      }
+    } catch (error) {
+      throw Exception('Failed to delete categories: $error');
     }
   }
 }

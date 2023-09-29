@@ -5,15 +5,17 @@ class GalleryAdminState with _$GalleryAdminState {
   const factory GalleryAdminState(
       {required final List<Category> categoryList,
       required final List<GalleryImage> imageList,
-      final Category? selectedCategoryMarked,
-      final GalleryImage? selectedImageMarked,
+      required final List<Category> selectedCategoriesMarked,
+      required final List<GalleryImage> selectedImagesMarked,
       final Category? selectedCategoryClicked}) = _GalleryAdminState;
 
   factory GalleryAdminState.initial() {
     return const GalleryAdminState(
-        categoryList: [],
-        imageList: [],
-        selectedCategoryClicked: null,
-        selectedCategoryMarked: null);
+      selectedImagesMarked: [],
+      selectedCategoriesMarked: [],
+      categoryList: [],
+      imageList: [],
+      selectedCategoryClicked: null,
+    );
   }
 }

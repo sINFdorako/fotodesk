@@ -5,12 +5,13 @@ import 'package:fotodesk/features/gallery_administration/domain/repositories/gal
 
 import '../../../../core/errors/failures.dart';
 
-class CreateImage {
+class CreateImages {
   final GalleryAdminRepository repository;
 
-  CreateImage(this.repository);
+  CreateImages(this.repository);
 
-  Future<Either<Failure, void>> execute(int categoryId, File imageFile) async {
-    return await repository.createImage(categoryId, imageFile);
+  Future<Either<Failure, void>> execute(
+      int categoryId, List<File> imageFiles) async {
+    return await repository.createImages(categoryId, imageFiles);
   }
 }

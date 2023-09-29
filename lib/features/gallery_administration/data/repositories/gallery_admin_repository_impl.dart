@@ -69,10 +69,42 @@ class GalleryAdminRepositoryImpl implements GalleryAdminRepository {
   }
 
   @override
-  Future<Either<Failure, void>> createImage(
-      int categoryId, File imageFile) async {
+  Future<Either<Failure, void>> createImages(
+      int categoryId, List<File> imageFile) async {
     try {
-      await networkDataSourceGA.createImage(categoryId, imageFile);
+      await networkDataSourceGA.createImages(categoryId, imageFile);
+      return const Right(unit);
+    } catch (error) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteCategories(List<int> categoryIds) async {
+    try {
+      await networkDataSourceGA.deleteCategories(categoryIds);
+      return const Right(unit);
+    } catch (error) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteImages(List<int> imageIds) async {
+    try {
+      await networkDataSourceGA.deleteImages(imageIds);
+      return const Right(unit);
+    } catch (error) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateCategory(
+      int categoryId, Category newCategoryDetails) async {
+    try {
+      // Assuming the data source has a method that accepts an updated category object
+      await networkDataSourceGA.updateCategory(newCategoryDetails, categoryId);
       return const Right(unit);
     } catch (error) {
       return Left(ServerFailure());

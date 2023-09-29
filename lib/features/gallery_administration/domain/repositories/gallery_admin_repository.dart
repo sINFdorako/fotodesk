@@ -13,5 +13,10 @@ abstract class GalleryAdminRepository {
   Future<Either<Failure, List<GalleryImage>>> getImageByCategoryId(
       int categoryId);
   Future<Either<Failure, List<GalleryImage>>> getAllImages();
-  Future<Either<Failure, void>> createImage(int categoryId, File imageFile);
+  Future<Either<Failure, void>> createImages(
+      int categoryId, List<File> imageFile);
+  Future<Either<Failure, void>> deleteImages(List<int> imageIds);
+  Future<Either<Failure, void>> updateCategory(
+      int categoryId, Category category);
+  Future<Either<Failure, void>> deleteCategories(List<int> categoryIds);
 }

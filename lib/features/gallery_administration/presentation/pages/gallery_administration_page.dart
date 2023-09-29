@@ -37,104 +37,116 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
             _header(categoryClicked != null),
             Expanded(
                 child: categoryClicked != null
-                    ? ListView.builder(
-                        itemCount: categoryClicked.images!.length,
-                        itemBuilder: (context, index) {
-                          final fileItem = categoryClicked.images![index];
-                          final isSelected =
-                              state.selectedImageMarked == fileItem;
-                          return _listTile(
-                            fileItem,
-                            isSelected: isSelected,
-                            index: index,
-                            onTapOpenListTile: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return CustomDialog(
-                                    title: Text('${fileItem.originalFilename}'),
-                                    content: CachedNetworkImage(
-                                      imageUrl:
-                                          "https://backend.fotogalerie-wolfram-wildner.de/${fileItem.url!}",
-                                      fit: BoxFit.contain,
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                    actions: <Widget>[
-                                      CustomButton(
-                                        label: 'Close',
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
+                    ? categoryClicked.images!.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: categoryClicked.images!.length,
+                            itemBuilder: (context, index) {
+                              final fileItem = categoryClicked.images![index];
+                              final isSelected =
+                                  state.selectedImagesMarked.contains(fileItem);
+                              return _listTile(
+                                fileItem,
+                                isSelected: isSelected,
+                                index: index,
+                                onTapOpenListTile: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CustomDialog(
+                                        title: Text(
+                                            '${fileItem.originalFilename}'),
+                                        content: CachedNetworkImage(
+                                          imageUrl:
+                                              "https://backend.fotogalerie-wolfram-wildner.de/${fileItem.url!}",
+                                          fit: BoxFit.contain,
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                        actions: <Widget>[
+                                          CustomButton(
+                                            label: 'Close',
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
+                                },
+                                checkBoxOnChanged: (bool? value) {
+                                  if (value == true) {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .markImages(fileItem);
+                                  } else if (value == false) {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .unmarkImages(fileItem);
+                                  }
+                                },
+                                onTapMarkListTile: () {
+                                  if (isSelected) {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .unmarkImages(fileItem);
+                                  } else {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .markImages(fileItem);
+                                  }
                                 },
                               );
                             },
-                            checkBoxOnChanged: (bool? value) {
-                              if (value == true) {
-                                context
-                                    .read<GalleryAdminCubit>()
-                                    .markImage(fileItem);
-                              } else if (value == false) {
-                                context.read<GalleryAdminCubit>().unmarkImage();
-                              }
+                          )
+                        : const Center(
+                            child: Text(
+                                'Fügen Sie neue Bilder zur Galerie hinzu.'))
+                    : categories.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              final categoryItem = categories[index];
+                              final isSelected = state.selectedCategoriesMarked
+                                  .contains(categoryItem);
+                              return _listTile(
+                                categoryItem,
+                                isSelected: isSelected,
+                                index: index,
+                                onTapOpenListTile: () {
+                                  context
+                                      .read<GalleryAdminCubit>()
+                                      .setCategoryAsClicked(categoryItem);
+                                },
+                                onTapMarkListTile: () {
+                                  if (isSelected) {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .unmarkCategories(categoryItem);
+                                  } else {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .markCategories(categoryItem);
+                                  }
+                                },
+                                checkBoxOnChanged: (bool? value) {
+                                  if (value == true) {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .markCategories(categoryItem);
+                                  } else if (value == false) {
+                                    context
+                                        .read<GalleryAdminCubit>()
+                                        .unmarkCategories(categoryItem);
+                                  }
+                                },
+                              );
                             },
-                            onTapMarkListTile: () {
-                              if (isSelected) {
-                                context.read<GalleryAdminCubit>().unmarkImage();
-                              } else {
-                                context
-                                    .read<GalleryAdminCubit>()
-                                    .markImage(fileItem);
-                              }
-                            },
-                          );
-                        },
-                      )
-                    : ListView.builder(
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          final fileItem = categories[index];
-                          final isSelected =
-                              state.selectedCategoryMarked == fileItem;
-                          return _listTile(
-                            fileItem,
-                            isSelected: isSelected,
-                            index: index,
-                            onTapOpenListTile: () {
-                              context
-                                  .read<GalleryAdminCubit>()
-                                  .setCategoryAsClicked(fileItem);
-                            },
-                            onTapMarkListTile: () {
-                              if (isSelected) {
-                                context
-                                    .read<GalleryAdminCubit>()
-                                    .unmarkCategory();
-                              } else {
-                                context
-                                    .read<GalleryAdminCubit>()
-                                    .markCategory(fileItem);
-                              }
-                            },
-                            checkBoxOnChanged: (bool? value) {
-                              if (value == true) {
-                                context
-                                    .read<GalleryAdminCubit>()
-                                    .markCategory(fileItem);
-                              } else if (value == false) {
-                                context
-                                    .read<GalleryAdminCubit>()
-                                    .unmarkCategory();
-                              }
-                            },
-                          );
-                        },
-                      )),
+                          )
+                        : const Center(
+                            child: Text('Fügen Sie neue Kategorien hinzu.')))
           ],
         );
       },

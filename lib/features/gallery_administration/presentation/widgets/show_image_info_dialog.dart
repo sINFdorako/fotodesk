@@ -7,55 +7,57 @@ import 'package:fotodesk/features/gallery_administration/domain/usecases/format_
 import 'package:fotodesk/features/gallery_administration/domain/usecases/transform_date.dart';
 
 class ShowImageInfoDialog {
-  Future<void> show(BuildContext context, GalleryImage imageMarked) {
+  Future<void> show(BuildContext context, List<GalleryImage> imageMarked) {
     return showDialog(
       context: context,
       builder: (context) {
         return CustomDialog(
           width: 600.w,
           height: 600.h,
-          title: Text(imageMarked.originalFilename ?? "Image Details"),
+          title: Text(imageMarked[0].originalFilename ?? "Image Details"),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildMetadataItem('Titel', imageMarked.title),
-                _buildMetadataItem('Beschreibung', imageMarked.description),
+                _buildMetadataItem('Titel', imageMarked[0].title),
+                _buildMetadataItem('Beschreibung', imageMarked[0].description),
                 _buildMetadataItem(
                     'Dateigröße',
-                    imageMarked.fileSize != null
-                        ? FormatFileSize().format(imageMarked.fileSize!)
+                    imageMarked[0].fileSize != null
+                        ? FormatFileSize().format(imageMarked[0].fileSize!)
                         : 'Unbekannte Bytes'),
-                _buildMetadataItem('MIME Typ', imageMarked.mimeType),
+                _buildMetadataItem('MIME Typ', imageMarked[0].mimeType),
                 _buildMetadataItem('Hochladedatum',
-                    TransformDate().getDate(imageMarked.uploadDate!)),
+                    TransformDate().getDate(imageMarked[0].uploadDate!)),
                 _buildMetadataItem('Letztes Änderungsdatum',
-                    TransformDate().getDate(imageMarked.lastModifiedDate!)),
+                    TransformDate().getDate(imageMarked[0].lastModifiedDate!)),
                 const Divider(),
                 const Text('EXIF Daten',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                _buildMetadataItem('Kamera Marke', imageMarked.cameraMake),
-                _buildMetadataItem('Kamera Modell', imageMarked.cameraModel),
+                _buildMetadataItem('Kamera Marke', imageMarked[0].cameraMake),
+                _buildMetadataItem('Kamera Modell', imageMarked[0].cameraModel),
                 _buildMetadataItem(
-                    'Belichtungszeit', '${imageMarked.exposureTime}'),
-                _buildMetadataItem('Blende', '${imageMarked.aperture}'),
-                _buildMetadataItem('ISO', '${imageMarked.iso}'),
+                    'Belichtungszeit', '${imageMarked[0].exposureTime}'),
+                _buildMetadataItem('Blende', '${imageMarked[0].aperture}'),
+                _buildMetadataItem('ISO', '${imageMarked[0].iso}'),
                 _buildMetadataItem(
-                    'Brennweite', '${imageMarked.focalLength}mm'),
+                    'Brennweite', '${imageMarked[0].focalLength}mm'),
                 _buildMetadataItem('Blitz verwendet',
-                    imageMarked.flashUsed == true ? 'Ja' : 'Nein'),
+                    imageMarked[0].flashUsed == true ? 'Ja' : 'Nein'),
                 const Divider(),
                 const Text('IPTC Daten',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                _buildMetadataItem('Ersteller', imageMarked.creator),
-                _buildMetadataItem('Urheberrecht', imageMarked.copyright),
+                _buildMetadataItem('Ersteller', imageMarked[0].creator),
+                _buildMetadataItem('Urheberrecht', imageMarked[0].copyright),
                 _buildMetadataItem(
-                    'Erstellungsdatum', '${imageMarked.creationDate}'),
+                    'Erstellungsdatum', '${imageMarked[0].creationDate}'),
                 const SizedBox(height: 16.0),
-                if (imageMarked.tags != null && imageMarked.tags!.isNotEmpty)
+                if (imageMarked[0].tags != null &&
+                    imageMarked[0].tags!.isNotEmpty)
                   Wrap(
                     spacing: 8.0,
-                    children: imageMarked.tags!
+                    children: imageMarked[0]
+                        .tags!
                         .map((tag) => Chip(label: Text(tag)))
                         .toList(),
                   )
@@ -82,9 +84,9 @@ class ShowImageInfoDialog {
             flex: 2,
             child: Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 16.0,
+                fontSize: 14.0.w,
                 color: Colors.black87,
               ),
             ),
@@ -96,7 +98,7 @@ class ShowImageInfoDialog {
             child: Text(
               value == 'null' || value == null ? '--' : value,
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0.w,
                 color: Colors.grey[700],
               ),
               textAlign: TextAlign.right,
