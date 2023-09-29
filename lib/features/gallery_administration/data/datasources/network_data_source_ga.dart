@@ -76,7 +76,7 @@ class NetworkDataSourceGA {
 
   Future<List<GalleryImage>> getAllImages() async {
     try {
-      final response = await _dio.get('image/uploads');
+      final response = await _dio.get('/image/uploads');
 
       if (response.statusCode == 200) {
         final List<dynamic> rawData = response.data as List;
@@ -100,7 +100,7 @@ class NetworkDataSourceGA {
       });
 
       final response =
-          await _dio.post('image/uploads/$categoryId', data: formData);
+          await _dio.post('/image/uploads/$categoryId', data: formData);
 
       if (response.statusCode == 200) {
       } else {

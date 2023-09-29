@@ -19,6 +19,7 @@ mixin _$GalleryAdminState {
   List<Category> get categoryList => throw _privateConstructorUsedError;
   List<GalleryImage> get imageList => throw _privateConstructorUsedError;
   Category? get selectedCategoryMarked => throw _privateConstructorUsedError;
+  GalleryImage? get selectedImageMarked => throw _privateConstructorUsedError;
   Category? get selectedCategoryClicked => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -36,9 +37,11 @@ abstract class $GalleryAdminStateCopyWith<$Res> {
       {List<Category> categoryList,
       List<GalleryImage> imageList,
       Category? selectedCategoryMarked,
+      GalleryImage? selectedImageMarked,
       Category? selectedCategoryClicked});
 
   $CategoryCopyWith<$Res>? get selectedCategoryMarked;
+  $GalleryImageCopyWith<$Res>? get selectedImageMarked;
   $CategoryCopyWith<$Res>? get selectedCategoryClicked;
 }
 
@@ -58,6 +61,7 @@ class _$GalleryAdminStateCopyWithImpl<$Res, $Val extends GalleryAdminState>
     Object? categoryList = null,
     Object? imageList = null,
     Object? selectedCategoryMarked = freezed,
+    Object? selectedImageMarked = freezed,
     Object? selectedCategoryClicked = freezed,
   }) {
     return _then(_value.copyWith(
@@ -73,6 +77,10 @@ class _$GalleryAdminStateCopyWithImpl<$Res, $Val extends GalleryAdminState>
           ? _value.selectedCategoryMarked
           : selectedCategoryMarked // ignore: cast_nullable_to_non_nullable
               as Category?,
+      selectedImageMarked: freezed == selectedImageMarked
+          ? _value.selectedImageMarked
+          : selectedImageMarked // ignore: cast_nullable_to_non_nullable
+              as GalleryImage?,
       selectedCategoryClicked: freezed == selectedCategoryClicked
           ? _value.selectedCategoryClicked
           : selectedCategoryClicked // ignore: cast_nullable_to_non_nullable
@@ -89,6 +97,18 @@ class _$GalleryAdminStateCopyWithImpl<$Res, $Val extends GalleryAdminState>
 
     return $CategoryCopyWith<$Res>(_value.selectedCategoryMarked!, (value) {
       return _then(_value.copyWith(selectedCategoryMarked: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $GalleryImageCopyWith<$Res>? get selectedImageMarked {
+    if (_value.selectedImageMarked == null) {
+      return null;
+    }
+
+    return $GalleryImageCopyWith<$Res>(_value.selectedImageMarked!, (value) {
+      return _then(_value.copyWith(selectedImageMarked: value) as $Val);
     });
   }
 
@@ -117,10 +137,13 @@ abstract class _$$_GalleryAdminStateCopyWith<$Res>
       {List<Category> categoryList,
       List<GalleryImage> imageList,
       Category? selectedCategoryMarked,
+      GalleryImage? selectedImageMarked,
       Category? selectedCategoryClicked});
 
   @override
   $CategoryCopyWith<$Res>? get selectedCategoryMarked;
+  @override
+  $GalleryImageCopyWith<$Res>? get selectedImageMarked;
   @override
   $CategoryCopyWith<$Res>? get selectedCategoryClicked;
 }
@@ -139,6 +162,7 @@ class __$$_GalleryAdminStateCopyWithImpl<$Res>
     Object? categoryList = null,
     Object? imageList = null,
     Object? selectedCategoryMarked = freezed,
+    Object? selectedImageMarked = freezed,
     Object? selectedCategoryClicked = freezed,
   }) {
     return _then(_$_GalleryAdminState(
@@ -154,6 +178,10 @@ class __$$_GalleryAdminStateCopyWithImpl<$Res>
           ? _value.selectedCategoryMarked
           : selectedCategoryMarked // ignore: cast_nullable_to_non_nullable
               as Category?,
+      selectedImageMarked: freezed == selectedImageMarked
+          ? _value.selectedImageMarked
+          : selectedImageMarked // ignore: cast_nullable_to_non_nullable
+              as GalleryImage?,
       selectedCategoryClicked: freezed == selectedCategoryClicked
           ? _value.selectedCategoryClicked
           : selectedCategoryClicked // ignore: cast_nullable_to_non_nullable
@@ -169,6 +197,7 @@ class _$_GalleryAdminState implements _GalleryAdminState {
       {required final List<Category> categoryList,
       required final List<GalleryImage> imageList,
       this.selectedCategoryMarked,
+      this.selectedImageMarked,
       this.selectedCategoryClicked})
       : _categoryList = categoryList,
         _imageList = imageList;
@@ -192,11 +221,13 @@ class _$_GalleryAdminState implements _GalleryAdminState {
   @override
   final Category? selectedCategoryMarked;
   @override
+  final GalleryImage? selectedImageMarked;
+  @override
   final Category? selectedCategoryClicked;
 
   @override
   String toString() {
-    return 'GalleryAdminState(categoryList: $categoryList, imageList: $imageList, selectedCategoryMarked: $selectedCategoryMarked, selectedCategoryClicked: $selectedCategoryClicked)';
+    return 'GalleryAdminState(categoryList: $categoryList, imageList: $imageList, selectedCategoryMarked: $selectedCategoryMarked, selectedImageMarked: $selectedImageMarked, selectedCategoryClicked: $selectedCategoryClicked)';
   }
 
   @override
@@ -210,6 +241,8 @@ class _$_GalleryAdminState implements _GalleryAdminState {
                 .equals(other._imageList, _imageList) &&
             (identical(other.selectedCategoryMarked, selectedCategoryMarked) ||
                 other.selectedCategoryMarked == selectedCategoryMarked) &&
+            (identical(other.selectedImageMarked, selectedImageMarked) ||
+                other.selectedImageMarked == selectedImageMarked) &&
             (identical(
                     other.selectedCategoryClicked, selectedCategoryClicked) ||
                 other.selectedCategoryClicked == selectedCategoryClicked));
@@ -221,6 +254,7 @@ class _$_GalleryAdminState implements _GalleryAdminState {
       const DeepCollectionEquality().hash(_categoryList),
       const DeepCollectionEquality().hash(_imageList),
       selectedCategoryMarked,
+      selectedImageMarked,
       selectedCategoryClicked);
 
   @JsonKey(ignore: true)
@@ -236,6 +270,7 @@ abstract class _GalleryAdminState implements GalleryAdminState {
       {required final List<Category> categoryList,
       required final List<GalleryImage> imageList,
       final Category? selectedCategoryMarked,
+      final GalleryImage? selectedImageMarked,
       final Category? selectedCategoryClicked}) = _$_GalleryAdminState;
 
   @override
@@ -244,6 +279,8 @@ abstract class _GalleryAdminState implements GalleryAdminState {
   List<GalleryImage> get imageList;
   @override
   Category? get selectedCategoryMarked;
+  @override
+  GalleryImage? get selectedImageMarked;
   @override
   Category? get selectedCategoryClicked;
   @override

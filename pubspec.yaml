@@ -26,6 +26,8 @@ dependencies:
   elegant_notification: ^1.11.1
   intl: ^0.18.0
   cached_network_image: ^3.3.0
+  image_picker: ^1.0.4
+  file_picker: ^5.5.0
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,18 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_dialog.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
+import 'package:fotodesk/features/gallery_administration/domain/entities/gallery_image.dart';
+import 'package:fotodesk/features/gallery_administration/domain/usecases/pick_files_from_desktop.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/pages/gallery_administration_page.dart';
+import 'package:fotodesk/features/gallery_administration/presentation/widgets/add_new_category_dialog.dart';
+import 'package:fotodesk/features/gallery_administration/presentation/widgets/show_image_info_dialog.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/features/ui/presentation/widgets/animations/switch_in_switch_out.dart';
 import '../../../gallery_administration/domain/entities/category.dart';
@@ -118,12 +127,15 @@ class Navbar extends StatelessWidget {
         context.watch<GalleryAdminCubit>().state.selectedCategoryMarked;
     final categoryClicked =
         context.watch<GalleryAdminCubit>().state.selectedCategoryClicked;
+    final imageMarked =
+        context.watch<GalleryAdminCubit>().state.selectedImageMarked;
 
     Widget content;
     if (selected == NavBarItem.home) {
       content = _homeContent(context);
     } else if (selected == NavBarItem.gallery) {
-      content = _galleryContent(categoryMarked, categoryClicked, context);
+      content = _galleryContent(
+          categoryMarked, categoryClicked, imageMarked, context);
     } else {
       content = _defaultContent(context);
     }
@@ -152,7 +164,7 @@ class Navbar extends StatelessWidget {
   }
 
   Widget _galleryContent(Category? categoryMarked, Category? categoryClicked,
-      BuildContext context) {
+      GalleryImage? imageMarked, BuildContext context) {
     List<Widget> children = [
       SwitchInSwitchOut(
           key: categoryClicked != null
@@ -171,6 +183,7 @@ class Navbar extends StatelessWidget {
         SwitchInSwitchOut(
           key: const ValueKey('deleteButton'),
           child: CustomButton(
+            iconData: Icons.delete,
             label: 'Kategorie löschen',
             onPressed: () => {},
           ),
@@ -179,26 +192,60 @@ class Navbar extends StatelessWidget {
         SwitchInSwitchOut(
           key: const ValueKey('editButton'),
           child: CustomButton(
+            iconData: Icons.edit,
             label: 'Kategorie bearbeiten',
             onPressed: () => {},
           ),
         ),
       ]);
-    } else if (categoryClicked != null) {
+    } else if (categoryClicked != null && imageMarked == null) {
+      File? imageFile;
+      final galleryAdminCubit = context.read<GalleryAdminCubit>();
       children.add(
         SwitchInSwitchOut(
           key: const ValueKey('uploadButton'),
           child: CustomButton(
+            iconData: Icons.upload,
             label: 'Bild hochladen',
-            onPressed: () => {},
+            onPressed: () async => {
+              imageFile = await PickFilesFromDesktop().pick(),
+              if (imageFile != null)
+                {galleryAdminCubit.uploadImage(categoryClicked, imageFile!)}
+            },
           ),
         ),
       );
-    } else {
+    }
+    if (imageMarked != null) {
+      children.addAll([
+        SwitchInSwitchOut(
+          key: const ValueKey('deleteImageButton'),
+          child: CustomButton(
+            iconData: Icons.delete,
+            label: 'Bild löschen',
+            onPressed: () async => {},
+          ),
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        SwitchInSwitchOut(
+          key: const ValueKey('imageInformationButton'),
+          child: CustomButton(
+            iconData: Icons.info,
+            label: 'Bild Informationen',
+            onPressed: () async =>
+                {ShowImageInfoDialog().show(context, imageMarked)},
+          ),
+        ),
+      ]);
+    }
+    if (categoryMarked == null && categoryClicked == null) {
       children.add(
         SwitchInSwitchOut(
           key: const ValueKey('newCategoryButton'),
           child: CustomButton(
+            iconData: Icons.image_outlined,
             label: 'Neue Kategorie',
             onPressed: () => addNewCategory(context),
           ),
@@ -213,26 +260,6 @@ class Navbar extends StatelessWidget {
     );
   }
 
-  Widget _animatedButton(String label, VoidCallback onPressed, ValueKey key) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: const Offset(0, 0),
-          ).animate(animation),
-          child: child,
-        );
-      },
-      child: CustomButton(
-        key: key,
-        label: label,
-        onPressed: onPressed,
-      ),
-    );
-  }
-
   Widget _defaultContent(BuildContext context) {
     return Align(
       key: const ValueKey('other'),
@@ -243,6 +270,7 @@ class Navbar extends StatelessWidget {
 
   Widget _navBarTitle(String title, BuildContext context,
       {Key? key, Category? categoryClicked}) {
+    final galleryCubit = context.read<GalleryAdminCubit>();
     return Container(
       margin: EdgeInsets.only(left: 20.w),
       child: categoryClicked != null
@@ -251,9 +279,10 @@ class Navbar extends StatelessWidget {
                 Row(
                   children: [
                     InkWell(
-                      onTap: () => context
-                          .read<GalleryAdminCubit>()
-                          .deSetCategoryAsClicked(categoryClicked),
+                      onTap: () => {
+                        galleryCubit.deSetCategoryAsClicked(categoryClicked),
+                        galleryCubit.unmarkImage()
+                      },
                       child: Row(
                         children: [
                           SizedBox(width: 10.w),

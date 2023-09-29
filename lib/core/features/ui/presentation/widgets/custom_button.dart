@@ -8,6 +8,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double width;
   final double height;
+  final IconData? iconData;
 
   const CustomButton({
     super.key,
@@ -15,20 +16,39 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.width = 45,
     this.height = 50,
+    this.iconData,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(
-          Size(width.w, height.h),
+    return IntrinsicWidth(
+      child: OutlinedButton(
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(
+            Size(width.w, height.h),
+          ),
         ),
-      ),
-      onPressed: onPressed,
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white),
+        onPressed: onPressed,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Center the content
+          children: <Widget>[
+            iconData != null
+                ? Icon(
+                    iconData,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20.w,
+                  )
+                : Container(
+                    width: 0,
+                  ),
+            const SizedBox(
+                width: 8.0), // Some spacing between the icon and the label
+            Text(
+              label,
+              style: TextStyle(color: Colors.black54, fontSize: 13.w),
+            ),
+          ],
+        ),
       ),
     );
   }

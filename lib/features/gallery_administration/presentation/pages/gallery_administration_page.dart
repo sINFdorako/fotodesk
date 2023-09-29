@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_dialog.dart';
+import 'package:fotodesk/features/gallery_administration/domain/usecases/format_file_size.dart';
+import 'package:fotodesk/features/gallery_administration/domain/usecases/transform_date.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
-import 'package:intl/intl.dart';
 
 import '../../domain/entities/category.dart';
 import '../../domain/entities/gallery_image.dart';
@@ -30,43 +34,63 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
         final categoryClicked = state.selectedCategoryClicked;
         return Column(
           children: [
-            _header(),
+            _header(categoryClicked != null),
             Expanded(
                 child: categoryClicked != null
                     ? ListView.builder(
                         itemCount: categoryClicked.images!.length,
                         itemBuilder: (context, index) {
                           final fileItem = categoryClicked.images![index];
-                          const isSelected = false;
+                          final isSelected =
+                              state.selectedImageMarked == fileItem;
                           return _listTile(
                             fileItem,
                             isSelected: isSelected,
                             index: index,
                             onTapOpenListTile: () {
                               showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Dialog(
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            "https://backend.fotogalerie-wolfram-wildner.de/${fileItem.url!}",
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CustomDialog(
+                                    title: Text('${fileItem.originalFilename}'),
+                                    content: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://backend.fotogalerie-wolfram-wildner.de/${fileItem.url!}",
+                                      fit: BoxFit.contain,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    ),
+                                    actions: <Widget>[
+                                      CustomButton(
+                                        label: 'Close',
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
-                                    );
-                                  });
-                            },
-                            onTapMarkListTile: () {
-                              // ignore: dead_code
-                              if (isSelected) {
-                              } else {}
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             checkBoxOnChanged: (bool? value) {
                               if (value == true) {
-                              } else if (value == false) {}
+                                context
+                                    .read<GalleryAdminCubit>()
+                                    .markImage(fileItem);
+                              } else if (value == false) {
+                                context.read<GalleryAdminCubit>().unmarkImage();
+                              }
+                            },
+                            onTapMarkListTile: () {
+                              if (isSelected) {
+                                context.read<GalleryAdminCubit>().unmarkImage();
+                              } else {
+                                context
+                                    .read<GalleryAdminCubit>()
+                                    .markImage(fileItem);
+                              }
                             },
                           );
                         },
@@ -117,18 +141,6 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
     );
   }
 
-  String formatFileSize(int bytes) {
-    if (bytes < 1024) {
-      return "$bytes B"; // Bytes
-    } else if (bytes < 1024 * 1024) {
-      return "${(bytes / 1024).toStringAsFixed(2)} KB"; // Kilobytes
-    } else if (bytes < 1024 * 1024 * 1024) {
-      return "${(bytes / (1024 * 1024)).toStringAsFixed(2)} MB"; // Megabytes
-    } else {
-      return "${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB"; // Gigabytes
-    }
-  }
-
   String _determineFileType(dynamic fileItem) {
     if (fileItem is Category) {
       return 'Ordner';
@@ -149,54 +161,65 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
       onTap: onTapOpenListTile,
       child: Container(
         color: determineTileColor(isSelected, index),
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            InkWell(
-              onTap: onTapMarkListTile,
+            Align(
+              alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Checkbox(
-                  value: isSelected,
-                  onChanged: checkBoxOnChanged,
+                padding: const EdgeInsets.only(left: 8.0),
+                child: InkWell(
+                  onTap: onTapMarkListTile,
+                  child: Checkbox(
+                    value: isSelected,
+                    onChanged: checkBoxOnChanged,
+                  ),
                 ),
               ),
             ),
-            VerticalDivider(
-                width: 16, color: Theme.of(context).colorScheme.onBackground),
+            const SizedBox(
+              width: 16,
+            ),
+            fileItem is GalleryImage
+                ? Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Image.network(
+                        "https://backend.fotogalerie-wolfram-wildner.de/${fileItem.url!}",
+                        fit: BoxFit.fitWidth,
+                        width: 65.w,
+                        height: 100.h,
+                      ),
+                    ),
+                  )
+                : Container(),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+              flex: 2,
+              child: Text(
                   fileItem is GalleryImage
-                      ? Expanded(
-                          child: Image.network(
-                              "https://backend.fotogalerie-wolfram-wildner.de/${fileItem.url!}"),
-                        )
-                      : Container(),
-                  Expanded(
-                    flex: 3,
-                    child: Text(fileItem is GalleryImage
-                        ? fileItem.originalFilename
-                        : fileItem.name),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(fileItem is GalleryImage
-                        ? formatFileSize(fileItem.fileSize ?? 0).toString()
-                        : fileItem.size.toString()),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(_getDate(fileItem.lastModifiedDate)),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(_determineFileType(fileItem)),
-                  ),
-                ],
+                      ? fileItem.originalFilename
+                      : fileItem.name,
+                  style: TextStyle(fontSize: 14.w)),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                fileItem is GalleryImage
+                    ? FormatFileSize().format(fileItem.fileSize ?? 0).toString()
+                    : fileItem.size.toString(),
+                style: TextStyle(fontSize: 14.w),
               ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(TransformDate().getDate(fileItem.lastModifiedDate),
+                  style: TextStyle(fontSize: 14.w)),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(_determineFileType(fileItem),
+                  style: TextStyle(fontSize: 14.w)),
             ),
           ],
         ),
@@ -214,14 +237,7 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
     }
   }
 
-  String _getDate(DateTime lastModifiedDate) {
-    final datePart = DateFormat('d. MMMM', 'de_DE').format(lastModifiedDate);
-    final timePart = DateFormat('HH:mm', 'de_DE').format(lastModifiedDate);
-
-    return '$datePart um $timePart Uhr';
-  }
-
-  _header() {
+  _header(bool isGalleryImage) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -229,54 +245,38 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
           width: 1.0,
         ),
       ),
-      child: const Padding(
-        padding: EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(flex: 3, child: Text('Name')),
-            Expanded(flex: 1, child: Text('Größe')),
-            Expanded(flex: 2, child: Text('Zuletzt bearbeitet')),
-            Expanded(flex: 2, child: Text('Art')),
+            const SizedBox(
+              width: 55,
+            ),
+            if (isGalleryImage)
+              Expanded(
+                flex: 2,
+                child: Text('Bild', style: TextStyle(fontSize: 14.w)),
+              ),
+            Expanded(
+              flex: 2,
+              child: Text('Name', style: TextStyle(fontSize: 14.w)),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text('Größe', style: TextStyle(fontSize: 14.w)),
+            ),
+            Expanded(
+              flex: 2,
+              child:
+                  Text('Zuletzt bearbeitet', style: TextStyle(fontSize: 14.w)),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text('Art', style: TextStyle(fontSize: 14.w)),
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-Future<void> addNewCategory(BuildContext context) async {
-  showDialog(
-    context: context,
-    builder: (context) {
-      TextEditingController controller = TextEditingController();
-      return AlertDialog(
-        title: const Text('New Category'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: 'Enter category name',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async => {Navigator.of(context).pop()},
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              if (controller.text.isNotEmpty) {
-                await context
-                    .read<GalleryAdminCubit>()
-                    .createCategory(Category(name: controller.text.trim()));
-                await context.read<GalleryAdminCubit>().getAllCategories();
-                Navigator.of(context).pop();
-              }
-            },
-            child: const Text('Add'),
-          ),
-        ],
-      );
-    },
-  );
 }

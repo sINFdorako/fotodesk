@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_text_field.dart';
 import 'package:fotodesk/core/router/router.gr.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 
@@ -31,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
           Expanded(
             child: Row(
               children: [
-                // Sign In Section
                 Expanded(
                   child: Container(
                     color: Theme.of(context).colorScheme.background,
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('In Fotodesk einloggen',
                                 style: TextStyle(
@@ -53,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                               height: 16,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
                                     onPressed: () {},
@@ -81,13 +82,17 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(
                               height: 8,
                             ),
-                            _customTextField('Email', Icons.person_outline,
-                                _emailController),
+                            CustomTextField(
+                                hintText: 'Email',
+                                icon: Icons.person_outline,
+                                controller: _emailController),
                             const SizedBox(
                               height: 4,
                             ),
-                            _customTextField('Passwort', Icons.lock_outline,
-                                _passwordController,
+                            CustomTextField(
+                                hintText: 'Passwort',
+                                icon: Icons.lock_outline,
+                                controller: _passwordController,
                                 isPassword: true),
                             TextButton(
                               onPressed: () {},
@@ -164,28 +169,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _customTextField(
-      String hintText, IconData icon, TextEditingController controller,
-      {bool isPassword = false}) {
-    return TextField(
-      controller: controller,
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        hintStyle: TextStyle(
-            fontWeight: FontWeight.w400,
-            color: Theme.of(context).colorScheme.onBackground),
-        prefixIcon: Icon(
-          icon,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        hintText: hintText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-      ),
-    );
-  }
-
   Widget _switchThemeButton() {
     return Positioned(
       right: 16,
@@ -250,6 +233,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 32,
             ),
             CustomButton(
+              width: 100,
               label: 'Jetzt Registrieren',
               onPressed: () {},
             ),

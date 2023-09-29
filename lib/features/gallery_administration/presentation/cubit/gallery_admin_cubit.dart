@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/features/gallery_administration/domain/repositories/gallery_admin_repository.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/create_category.dart';
+import 'package:fotodesk/features/gallery_administration/domain/usecases/create_image.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/get_image_by_category_id.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -35,7 +38,10 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
   }
 
   Future<void> setCategoryAsClicked(Category category) async {
-    final List<GalleryImage> images = await _getImageByCategoryId(category.id!);
+    final List<GalleryImage> images =
+        await _getImagesByCategoryId(category.id!);
+
+    unmarkCategory();
 
     // Update the selectedCategoryClicked with its respective images.
     final updatedCategory = category.copyWith(images: images);
@@ -47,7 +53,7 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
     emit(state.copyWith(selectedCategoryClicked: null));
   }
 
-  Future<List<GalleryImage>> _getImageByCategoryId(int categoryId) async {
+  Future<List<GalleryImage>> _getImagesByCategoryId(int categoryId) async {
     GetImageByCategoryId getImageByCategoryId =
         GetImageByCategoryId(galleryAdminRepository);
     final result = await getImageByCategoryId.execute(categoryId);
@@ -59,11 +65,26 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
     });
   }
 
+  Future<void> uploadImage(Category category, File imageFile) async {
+    CreateImage createImage = CreateImage(galleryAdminRepository);
+    await createImage.execute(category.id!, imageFile);
+
+    await setCategoryAsClicked(category);
+  }
+
   void markCategory(Category category) {
     emit(state.copyWith(selectedCategoryMarked: category));
   }
 
   void unmarkCategory() {
     emit(state.copyWith(selectedCategoryMarked: null));
+  }
+
+  void markImage(GalleryImage image) {
+    emit(state.copyWith(selectedImageMarked: image));
+  }
+
+  void unmarkImage() {
+    emit(state.copyWith(selectedImageMarked: null));
   }
 }

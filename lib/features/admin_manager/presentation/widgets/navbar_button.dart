@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/navbar.dart';
 
 import '../../../../core/router/router.gr.dart';
@@ -66,7 +67,7 @@ class NavBarButtonState extends State<NavBarButton> {
               alignment: Alignment.centerRight,
               child: Container(
                 width: double.infinity,
-                height: 60, // fixed height
+                height: 60.h, // fixed height
                 decoration: BoxDecoration(
                   color: isHovering || isSelected
                       ? Theme.of(context).scaffoldBackgroundColor
@@ -82,7 +83,7 @@ class NavBarButtonState extends State<NavBarButton> {
                     color: isHovering || isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Colors.white, // Check both conditions
-                    size: 30,
+                    size: 27.5.w,
                   ),
                 ),
               ),
