@@ -17,7 +17,16 @@ import '../../../gallery_administration/domain/entities/category.dart';
 import '../../../gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 import 'navbar_button.dart';
 
-enum NavBarItem { home, gallery, customers, calendar, help, logout }
+enum NavBarItem {
+  home,
+  gallery,
+  customers,
+  calendar,
+  help,
+  logout,
+  chat,
+  ecommerce
+}
 
 class Navbar extends StatelessWidget {
   final Widget mainContent;
@@ -58,11 +67,21 @@ class Navbar extends StatelessWidget {
             Icons.center_focus_strong,
             color: Colors.white,
           ),
-          SizedBox(height: 50.h),
+          SizedBox(height: 25.h),
           const NavBarButton(
             label: 'Home',
             icon: Icons.home,
             navBarItem: NavBarItem.home,
+          ),
+          const NavBarButton(
+            label: 'Chat',
+            icon: Icons.chat_bubble_outline_rounded,
+            navBarItem: NavBarItem.chat,
+          ),
+          const NavBarButton(
+            label: 'Ecommerce',
+            icon: Icons.shop,
+            navBarItem: NavBarItem.ecommerce,
           ),
           const NavBarButton(
             label: 'Gallery',
@@ -79,12 +98,7 @@ class Navbar extends StatelessWidget {
             icon: Icons.calendar_month,
             navBarItem: NavBarItem.calendar,
           ),
-          const NavBarButton(
-            label: 'Help',
-            icon: Icons.help,
-            navBarItem: NavBarItem.help,
-          ),
-          SizedBox(height: 50.h),
+          SizedBox(height: 25.h),
           const NavBarButton(
             label: 'Logout',
             icon: Icons.logout,
@@ -134,6 +148,10 @@ class Navbar extends StatelessWidget {
     } else if (selected == NavBarItem.gallery) {
       content = _galleryContent(
           categoriesMarked, categoryClicked, imagesMarked, context);
+    } else if (selected == NavBarItem.chat) {
+      content = _chatContent(context);
+    } else if (selected == NavBarItem.ecommerce) {
+      content = _eCommerceContent(context);
     } else {
       content = _defaultContent(context);
     }
@@ -484,6 +502,22 @@ class Navbar extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _chatContent(BuildContext context) {
+    return Align(
+      key: const ValueKey('chat'),
+      alignment: Alignment.centerLeft,
+      child: _navBarTitle('Fotodesk Chat AI', context),
+    );
+  }
+
+  Widget _eCommerceContent(BuildContext context) {
+    return Align(
+      key: const ValueKey('ecommerce'),
+      alignment: Alignment.centerLeft,
+      child: _navBarTitle('Ecommerce Anbindung', context),
     );
   }
 }

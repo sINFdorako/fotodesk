@@ -44,6 +44,8 @@ class NavBarButtonState extends State<NavBarButton> {
               case NavBarItem.home:
                 adminManagerCubit.selectNavBarItem(NavBarItem.home);
                 break;
+              case NavBarItem.chat:
+                adminManagerCubit.selectNavBarItem(NavBarItem.chat);
               case NavBarItem.gallery:
                 adminManagerCubit.selectNavBarItem(NavBarItem.gallery);
                 break;
@@ -56,6 +58,8 @@ class NavBarButtonState extends State<NavBarButton> {
               case NavBarItem.help:
                 adminManagerCubit.selectNavBarItem(NavBarItem.help);
                 break;
+              case NavBarItem.ecommerce:
+                adminManagerCubit.selectNavBarItem(NavBarItem.ecommerce);
               case NavBarItem.logout:
                 context.router.push(const LoginRoute());
                 break;
