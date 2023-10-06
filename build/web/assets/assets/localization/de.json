@@ -1,0 +1,8 @@
+{
+    "authentification": {
+        "username": "Benutzername",
+        "password": "Passwort",
+        "login": "Einloggen",
+        "title": "Fotodesk Login"
+    }
+}
