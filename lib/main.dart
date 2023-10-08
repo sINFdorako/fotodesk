@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/screen_size.dart';
 import 'package:fotodesk/core/theme/custom_theme.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
@@ -41,11 +43,31 @@ void main() async {
         ],
         child: ScreenUtilInit(
           designSize: const Size(1280, 800),
-          builder: (_, __) => const Fotodesk(),
+          builder: (_, __) => ScreenSize.isMobile(_)
+              ? const UnsupportedScreenSize()
+              : const Fotodesk(),
         ),
       ),
     ),
   );
+}
+
+class UnsupportedScreenSize extends StatelessWidget {
+  const UnsupportedScreenSize({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text(
+            "Die App ist derzeit nicht für Handys oder Tablets optimiert, bitte wechsle zu einem Computer oder vergrößere das Browserfenster.",
+            style: TextStyle(fontSize: FontUtil.h2),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class Fotodesk extends StatelessWidget {

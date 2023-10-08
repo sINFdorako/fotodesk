@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_dialog.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_dropdown.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
+import 'package:fotodesk/features/admin_manager/presentation/widgets/settings_page.dart';
+import 'package:fotodesk/features/admin_manager/presentation/widgets/user_info_page.dart';
 import 'package:fotodesk/features/gallery_administration/domain/entities/gallery_image.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/pick_files_from_desktop.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/widgets/add_new_category_dialog.dart';
@@ -483,23 +487,61 @@ class Navbar extends StatelessWidget {
               ),
             ],
           ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {},
-            iconSize: 24.r,
+          SizedBox(
+            width: 16.w,
           ),
-          const SizedBox(
-            width: 8,
-          ),
-          CircleAvatar(
-            radius: 22.5.r,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: Icon(
-              Icons.person,
-              size: 16.r,
-              color: Colors.white,
+          CustomDropdown<int>(
+            items: const [
+              PopupMenuItem(
+                value: 1,
+                child: Text('Benutzerprofil'),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Text('Einstellungen'),
+              ),
+              // ... other menu items ...
+            ],
+            onSelected: (value) {
+              switch (value) {
+                case 1:
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomDialog(
+                          width: 600.w,
+                          height: 600.h,
+                          title: const Text('Einstellungen'),
+                          content: const UserInfoPage(),
+                        );
+                      });
+                  break;
+                case 2:
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomDialog(
+                            width: 600.w,
+                            height: 600.h,
+                            title: const Text('Einstellungen'),
+                            content: const SettingsPage(),
+                            actions: [
+                              CustomButton(label: 'Speichern', onPressed: () {})
+                            ]);
+                      });
+                  break;
+              }
+            },
+            child: CircleAvatar(
+              radius: 22.5.r,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Icon(
+                Icons.person,
+                size: 16.r,
+                color: Colors.white,
+              ),
             ),
-          ),
+          )
         ],
       ),
     );

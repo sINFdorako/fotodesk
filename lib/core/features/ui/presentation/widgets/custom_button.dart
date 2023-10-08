@@ -56,20 +56,13 @@ class CustomButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center, // Center the content
           children: <Widget>[
-            iconData != null
-                ? Column(
-                    children: [
-                      Icon(
-                        iconData,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 20.w,
-                      ),
-                      const SizedBox(width: 8.0),
-                    ],
-                  )
-                : Container(
-                    width: 0,
-                  ),
+            if (iconData != null)
+              Icon(
+                iconData,
+                color: Theme.of(context).colorScheme.primary,
+                size: 20.w,
+              ),
+            if (iconData != null) SizedBox(width: 8.0.w),
             Text(
               label,
               style: TextStyle(
