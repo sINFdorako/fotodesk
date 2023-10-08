@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fotodesk/core/network/dio_client.dart';
+import 'package:fotodesk/features/authentification/domain/entities/user.dart';
 import 'local_data_source.dart';
 
 class NetworkDataSource {
@@ -19,7 +20,9 @@ class NetworkDataSource {
       if (response.statusCode == 200) {
         // Store token in shared preferences
         final token = response.data['token'];
-        await _localStorageService.saveUserToken(token);
+        print(token);
+        await _localStorageService
+            .saveUser(User(email: email, password: password, token: token));
       } else {
         throw Exception('Failed to load user');
       }
@@ -41,7 +44,8 @@ class NetworkDataSource {
       if (response.statusCode == 200) {
         // Store token in shared preferences
         final token = response.data['token'];
-        await _localStorageService.saveUserToken(token);
+        await _localStorageService
+            .saveUser(User(email: email, password: password, token: token));
       } else {
         throw Exception('Failed to register user');
       }

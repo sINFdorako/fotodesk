@@ -1,6 +1,9 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/screen_size.dart';
 
 enum ElegantNotificationType { success, error }
 
@@ -29,12 +32,17 @@ mixin ElegantNotificationMixin {
     return ElegantNotification(
       background: Theme.of(context).colorScheme.background,
       showProgressIndicator: false,
-      width: 360,
+      width: 360.w,
+      height: 100.h,
       notificationPosition: NotificationPosition.bottomRight,
-      animation: AnimationType.fromRight,
+      animation: ScreenSize.isMobile(context)
+          ? AnimationType.fromBottom
+          : AnimationType.fromRight,
       description: Text(
         description,
-        style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+        style: TextStyle(
+            fontSize: FontUtil.notification,
+            color: Theme.of(context).colorScheme.onBackground),
       ),
       onDismiss: () {},
       icon: Icon(

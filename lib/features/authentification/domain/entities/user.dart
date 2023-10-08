@@ -9,9 +9,10 @@ enum UserRole { user, superadmin }
 class User with _$User {
   const factory User({
     required String email,
-    required String password,
+    String? password,
     int? id,
     UserRole? role,
+    String? token,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

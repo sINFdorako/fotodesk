@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
@@ -18,7 +19,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 400.w),
+      constraints: const BoxConstraints(minWidth: 200, maxWidth: 400),
       child: TextField(
         controller: controller,
         obscureText: isPassword,
@@ -27,8 +28,8 @@ class CustomTextField extends StatelessWidget {
               vertical: 15.w, horizontal: 12.w), // Adjust as required
           hintStyle: TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 15.w,
-            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+            fontSize: FontUtil.hint,
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
           ),
           prefixIcon: Icon(
             icon,
@@ -45,27 +46,27 @@ class CustomTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.primary,
-              width: 2,
+              width: 2.w,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
+            borderSide: BorderSide(
               color: Colors.redAccent,
-              width: 2,
+              width: 2.w,
             ),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
+            borderSide: BorderSide(
               color: Colors.redAccent,
-              width: 2,
+              width: 2.w,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
             ),
           ),
         ),

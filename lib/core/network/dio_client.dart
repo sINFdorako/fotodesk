@@ -1,6 +1,6 @@
-// core/network/dio_client.dart
-
 import 'package:dio/dio.dart';
+import 'package:fotodesk/core/di/injector.dart';
+import 'package:fotodesk/core/router/router.gr.dart';
 import 'package:fotodesk/features/authentification/data/datasources/local_data_source.dart';
 
 class DioClient {
@@ -25,10 +25,20 @@ class DioClient {
             (RequestOptions options, RequestInterceptorHandler handler) async {
           // Check if the endpoint is NOT one of the endpoints that doesn't require authentication
           if (options.path != '/login' && options.path != '/register') {
-            final token = await LocalDataSource().getUserToken();
-            options.headers["Authorization"] = "Bearer $token";
+            final user = await LocalDataSource().getUser();
+            options.headers["Authorization"] = "Bearer ${user?.token ?? ''}";
           }
           return handler.next(options); // Continue with the request
+        },
+        onError:
+            (DioException dioError, ErrorInterceptorHandler handler) async {
+          if (dioError.response?.statusCode == 401) {
+            // Assuming 401 indicates token issues
+            await LocalDataSource().clearUser();
+            final router = getIt<AppRouter>();
+            await router.push(const LoginRoute());
+          }
+          return handler.next(dioError); // Continue with the error
         },
       ),
     );

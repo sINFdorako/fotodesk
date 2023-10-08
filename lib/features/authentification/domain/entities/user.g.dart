@@ -8,9 +8,10 @@ part of 'user.dart';
 
 _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       email: json['email'] as String,
-      password: json['password'] as String,
+      password: json['password'] as String?,
       id: json['id'] as int?,
       role: $enumDecodeNullable(_$UserRoleEnumMap, json['role']),
+      token: json['token'] as String?,
     );
 
 Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
@@ -18,6 +19,7 @@ Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'password': instance.password,
       'id': instance.id,
       'role': _$UserRoleEnumMap[instance.role],
+      'token': instance.token,
     };
 
 const _$UserRoleEnumMap = {

@@ -18,10 +18,15 @@ import '../../features/admin_manager/presentation/pages/admin_manager_page.dart'
     as _i2;
 import '../../features/authentification/presentation/pages/login_page.dart'
     as _i1;
+import 'auth_guard.dart' as _i5;
 
 class AppRouter extends _i3.RootStackRouter {
-  AppRouter([_i4.GlobalKey<_i4.NavigatorState>? navigatorKey])
-      : super(navigatorKey);
+  AppRouter({
+    _i4.GlobalKey<_i4.NavigatorState>? navigatorKey,
+    required this.authGuard,
+  }) : super(navigatorKey);
+
+  final _i5.AuthGuard authGuard;
 
   @override
   final Map<String, _i3.PageFactory> pagesMap = {
@@ -60,6 +65,7 @@ class AppRouter extends _i3.RootStackRouter {
         _i3.RouteConfig(
           AdminManagerRoute.name,
           path: '/admin-manager',
+          guards: [authGuard],
         ),
       ];
 }

@@ -18,10 +18,6 @@ class _AdminManagerPageState extends State<AdminManagerPage> {
   @override
   Widget build(BuildContext context) {
     final selectedType = context.watch<AdminManagerCubit>().state.selectedType;
-    ScreenUtil.init(
-      context,
-      designSize: const Size(1280, 800),
-    );
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

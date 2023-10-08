@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
 import 'package:fotodesk/features/generative_chat/presentation/widgets/sales_analytics_chart.dart';
 
 class EcommerceViewBox extends StatelessWidget {

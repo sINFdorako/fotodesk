@@ -1,3 +1,4 @@
+import 'package:fotodesk/core/router/auth_guard.dart';
 import 'package:fotodesk/features/authentification/data/datasources/network_data_source.dart';
 import 'package:get_it/get_it.dart';
 import '../../features/authentification/data/repositories/auth_repository_impl.dart';
@@ -13,5 +14,7 @@ void setupLocator() {
     ..registerLazySingleton<AuthRepository>(
         () => AuthRepositoryImpl(getIt<NetworkDataSource>()))
     ..registerLazySingleton<LoginUser>(() => LoginUser(getIt<AuthRepository>()))
-    ..registerLazySingleton<AppRouter>(() => AppRouter());
+    ..registerLazySingleton<AuthGuard>(() => AuthGuard())
+    ..registerLazySingleton<AppRouter>(
+        () => AppRouter(authGuard: getIt<AuthGuard>()));
 }
