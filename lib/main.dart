@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/screen_size.dart';
 import 'package:fotodesk/core/theme/custom_theme.dart';
+import 'package:fotodesk/features/admin_manager/data/datasources/network_data_source_am.dart';
+import 'package:fotodesk/features/admin_manager/data/repositories/admin_manager_repository_impl.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 import 'package:fotodesk/features/gallery_administration/data/datasources/network_data_source_ga.dart';
@@ -21,8 +23,11 @@ void main() async {
 
   //GalleryAdmin init
   final networkDataSourceGA = NetworkDataSourceGA();
+  final networkDataSourceAM = NetworkDataSourceAM();
   final galleryAdminRepository =
       GalleryAdminRepositoryImpl(networkDataSourceGA);
+  final adminManagerRepository =
+      AdminManagerRepositoryImpl(networkDataSourceAM);
 
   runApp(
     EasyLocalization(
@@ -35,7 +40,7 @@ void main() async {
             create: (context) => AuthCubit(),
           ),
           BlocProvider(
-            create: (context) => AdminManagerCubit(),
+            create: (context) => AdminManagerCubit(adminManagerRepository),
           ),
           BlocProvider(
             create: (context) => GalleryAdminCubit(galleryAdminRepository),

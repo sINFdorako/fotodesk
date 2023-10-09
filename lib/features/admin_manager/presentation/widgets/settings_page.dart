@@ -1,5 +1,15 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/notifications/presentation/widgets/notifications.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
+import 'package:fotodesk/features/admin_manager/data/datasources/local_data_source_am.dart';
+import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/authentification/domain/entities/fotodesk_setting.dart';
+import 'package:fotodesk/features/gallery_administration/domain/usecases/format_file_size.dart';
+import 'package:fotodesk/features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -11,7 +21,8 @@ class SettingsPage extends StatefulWidget {
 class SettingsPageState extends State<SettingsPage> {
   final List<FotodeskPackage> _selectedPackages = [];
   int _appSizeInGB = 5; // default
-  final String _apiKey = "a5b3c**************";
+  String? _apiKey = "";
+  int? _applicationSize = 0;
 
   double _calculatePrice() {
     double galleryPrice =
@@ -47,10 +58,39 @@ class SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  _getApiKeyPreview() async {
+    return await LocalDataSourceAM().getApiKeyPreview();
+  }
+
+  Future<void> _initializeApiKeyPreview() async {
+    final String apiKeyPreview = await _getApiKeyPreview();
+    if (apiKeyPreview != '') {
+      setState(() {
+        _apiKey = "$apiKeyPreview****************";
+      });
+    }
+  }
+
+  Future<void> _getSizeOfAllImages() async {
+    final galleryCubit = context.read<GalleryAdminCubit>();
+    final int imageSize = await galleryCubit.getSizeOfAllImages();
+    setState(() {
+      _applicationSize = imageSize;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeApiKeyPreview();
+    _getSizeOfAllImages();
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TextTheme textTheme = theme.textTheme;
+    final adminManagerCubit = context.read<AdminManagerCubit>();
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -105,19 +145,75 @@ class SettingsPageState extends State<SettingsPage> {
           }),
           const Divider(),
           const SizedBox(height: 20),
-          Text('Ausgewählter Speicher $_appSizeInGB GB',
-              style: textTheme.titleLarge),
-          Slider(
-            value: _appSizeInGB.toDouble(),
-            onChanged: (newValue) {
-              setState(() {
-                _appSizeInGB = newValue.toInt();
-              });
-            },
-            min: 1,
-            max: 50,
-            divisions: 49, // for integer values between 1 and 50
-            label: '$_appSizeInGB GB',
+          Column(
+            children: <Widget>[
+              Card(
+                elevation: 4.0, // adjust this for desired shadow depth
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // rounded corners
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0), // space inside the card
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.sd_storage, // Icon representing storage
+                                color: Theme.of(context)
+                                    .primaryColor, // Choose an appropriate color
+                                size: 24.0, // Adjust the size as needed
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                'Verfügbarer Speicher: $_appSizeInGB GB',
+                                style: TextStyle(fontSize: FontUtil.paragraph),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons
+                                    .folder_open, // Icon representing used storage
+                                color: Theme.of(context)
+                                    .primaryColor, // Choose an appropriate color
+                                size: 24.0, // Adjust the size as needed
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                'Genutzter Speicher: ${FormatFileSize().format(_applicationSize ?? 0)} ',
+                                style: TextStyle(fontSize: FontUtil.paragraph),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(
+                          height:
+                              10), // provides a bit of spacing between text and slider
+                      Slider(
+                        value: _appSizeInGB.toDouble(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _appSizeInGB = newValue.toInt();
+                          });
+                        },
+                        min: 1,
+                        max: 50,
+                        divisions: 49,
+                        label: '$_appSizeInGB GB',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // ... other widgets if any ...
+            ],
           ),
           const Divider(),
           const SizedBox(height: 20),
@@ -128,17 +224,34 @@ class SettingsPageState extends State<SettingsPage> {
             children: [
               Expanded(
                 child: Text(
-                  _apiKey,
+                  _apiKey == '' ? 'Kein API Schlüssel vorhanden' : _apiKey!,
                   overflow: TextOverflow.ellipsis,
                   style: textTheme.titleMedium,
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  // Function to update API key goes here
-                },
-                child: const Text('API Schlüssel aktualisieren'),
-              ),
+                  onPressed: () async {
+                    _apiKey = await adminManagerCubit.updateApiKey();
+                    if (_apiKey != null) {
+                      await LocalDataSourceAM().saveApiKeyPreview(
+                          _apiKey!.substring(0, min(5, _apiKey!.length)));
+                      Clipboard.setData(ClipboardData(text: _apiKey!));
+                      Notifications(context).showInfo(
+                          toastDuration: const Duration(seconds: 15),
+                          width: 400.w,
+                          height: 300.h,
+                          description:
+                              'Dein API Schlüssel wurde erfolgreich in der Zwischenablage kopiert.\n \n Bitte bewahre ihn gut auf deinem PC auf, da du ihn in der Applikation aufgrund der Verschlüsselung nicht mehr sehen kannst.\n \n Solltest du Ihn verlieren, musst du dir wieder einen neuen generieren lassen.');
+                    }
+                    final apiKeyPreview =
+                        await LocalDataSourceAM().getApiKeyPreview();
+                    setState(() {
+                      _apiKey = '$apiKeyPreview****************';
+                    });
+                  },
+                  child: _apiKey != ''
+                      ? const Text('API Schlüssel aktualisieren')
+                      : const Text('API Schlüssel erstellen')),
             ],
           ),
           const Divider(),

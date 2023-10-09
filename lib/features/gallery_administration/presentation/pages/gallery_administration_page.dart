@@ -108,7 +108,7 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
                         ? ListView.builder(
                             itemCount: categories.length,
                             itemBuilder: (context, index) {
-                              final categoryItem = categories[index];
+                              Category categoryItem = categories[index];
                               final isSelected = state.selectedCategoriesMarked
                                   .contains(categoryItem);
                               return _listTile(
@@ -219,7 +219,7 @@ class GalleryAdministrationPageState extends State<GalleryAdministrationPage> {
               child: Text(
                 fileItem is GalleryImage
                     ? FormatFileSize().format(fileItem.fileSize ?? 0).toString()
-                    : fileItem.size.toString(),
+                    : FormatFileSize().format(fileItem.size ?? 0).toString(),
                 style: TextStyle(fontSize: 14.w),
               ),
             ),

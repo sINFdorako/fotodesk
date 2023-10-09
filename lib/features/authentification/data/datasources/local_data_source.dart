@@ -16,7 +16,6 @@ class LocalDataSource {
     final prefs = await SharedPreferences.getInstance();
     final email = prefs.getString(userEmailKey);
     final token = prefs.getString(userTokenKey);
-    print('user token received on get: $token');
 
     if (email != null && token != null) {
       return User(email: email, token: token);
