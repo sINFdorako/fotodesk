@@ -56,13 +56,24 @@ class ProfileMenu extends StatelessWidget {
             items: const [
               PopupMenuItem(
                 value: 1,
-                child: Text('Benutzerprofil'),
+                child: Row(
+                  children: [
+                    Icon(Icons.person), // Icon for the Benutzerprofil
+                    SizedBox(width: 8.0),
+                    Text('Benutzerprofil'),
+                  ],
+                ),
               ),
               PopupMenuItem(
                 value: 2,
-                child: Text('Einstellungen'),
+                child: Row(
+                  children: [
+                    Icon(Icons.settings), // Icon for the Einstellungen
+                    SizedBox(width: 8.0),
+                    Text('Einstellungen'),
+                  ],
+                ),
               ),
-              // ... other menu items ...
             ],
             onSelected: (value) {
               switch (value) {
@@ -73,7 +84,7 @@ class ProfileMenu extends StatelessWidget {
                         return CustomDialog(
                           width: 600.w,
                           height: 600.h,
-                          title: const Text('Einstellungen'),
+                          title: const Text('Benutzerprofil'),
                           content: const UserInfoPage(),
                         );
                       });

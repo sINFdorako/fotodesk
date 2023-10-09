@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/core/errors/failures.dart';
 
@@ -70,7 +68,7 @@ class GalleryAdminRepositoryImpl implements GalleryAdminRepository {
 
   @override
   Future<Either<Failure, void>> createImages(
-      int categoryId, List<File> imageFile) async {
+      int categoryId, List<dynamic> imageFile) async {
     try {
       await networkDataSourceGA.createImages(categoryId, imageFile);
       return const Right(unit);

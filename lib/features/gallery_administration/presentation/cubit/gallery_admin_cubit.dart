@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/delete_categories.dart';
@@ -90,7 +88,7 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
     });
   }
 
-  Future<void> uploadImages(Category category, List<File> imageFiles) async {
+  Future<void> uploadImages(Category category, List<dynamic> imageFiles) async {
     CreateImages createImage = CreateImages(galleryAdminRepository);
     await createImage.execute(category.id!, imageFiles);
 

@@ -29,6 +29,7 @@ class CustomDropdown<T> extends StatelessWidget {
               border: Border(
                 bottom: BorderSide(
                   color: theme.colorScheme.onSurface.withOpacity(0.2),
+                  width: 1.5, // Adjust the border width for emphasis if needed
                 ),
               ),
             ),
@@ -40,7 +41,7 @@ class CustomDropdown<T> extends StatelessWidget {
       offset: const Offset(0, 55),
       elevation: 4.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4.0),
+        borderRadius: BorderRadius.circular(16.0),
         side: BorderSide(
           color: theme.colorScheme.secondary,
         ),

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failures.dart';
@@ -14,7 +12,7 @@ abstract class GalleryAdminRepository {
       int categoryId);
   Future<Either<Failure, List<GalleryImage>>> getAllImages();
   Future<Either<Failure, void>> createImages(
-      int categoryId, List<File> imageFile);
+      int categoryId, List<dynamic> imageFile);
   Future<Either<Failure, void>> deleteImages(List<int> imageIds);
   Future<Either<Failure, void>> updateCategory(
       int categoryId, Category category);

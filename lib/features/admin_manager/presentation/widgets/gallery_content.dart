@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/animations/switch_in_switch_out.dart';
@@ -92,7 +90,7 @@ class GalleryContent {
     }
 
     if (categoryClicked != null && imagesMarked.isEmpty) {
-      List<File>? imageFiles;
+      List<dynamic>? imageFiles;
       children.add(
         SwitchInSwitchOut(
           key: const ValueKey('uploadButton'),
