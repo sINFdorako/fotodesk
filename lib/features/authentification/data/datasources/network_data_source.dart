@@ -18,9 +18,7 @@ class NetworkDataSource {
       );
 
       if (response.statusCode == 200) {
-        // Store token in shared preferences
         final token = response.data['token'];
-        print(token);
         await _localStorageService
             .saveUser(User(email: email, password: password, token: token));
       } else {
@@ -31,21 +29,27 @@ class NetworkDataSource {
     }
   }
 
-  Future<void> registerUser(String email, String password) async {
+  Future<User> registerUser(User user) async {
     try {
       final response = await _dio.post(
         '/auth/register',
         data: {
-          'email': email,
-          'password': password,
+          'email': user.email,
+          'password': user.password,
+          // add other user details if needed for the registration API
         },
       );
 
       if (response.statusCode == 200) {
-        // Store token in shared preferences
         final token = response.data['token'];
-        await _localStorageService
-            .saveUser(User(email: email, password: password, token: token));
+        final registeredUser = User(
+          email: user.email,
+          password: user.password,
+          token: token,
+          // You can expand this with other fields if the response has them.
+        );
+        await _localStorageService.saveUser(registeredUser);
+        return registeredUser; // returning the user with the token from the registration API
       } else {
         throw Exception('Failed to register user');
       }
@@ -54,10 +58,17 @@ class NetworkDataSource {
     }
   }
 
-  // --> backend route needs to be adjusted, so that userId is read out of token
-  // Future<User> getUserById() async {
-  //   try {
-  //     final response = await _dio.get('/user:id');
-  //   }
-  // }
+  Future<User> getUser() async {
+    try {
+      final response = await _dio.get('/auth/user');
+
+      if (response.statusCode == 200) {
+        return User.fromJson(response.data);
+      } else {
+        throw Exception('Failed to fetch user details');
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch user details: $error');
+    }
+  }
 }

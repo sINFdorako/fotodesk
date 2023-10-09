@@ -20,7 +20,7 @@ FotodeskSetting _$FotodeskSettingFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FotodeskSetting {
-  List<FotodeskPackage> get packages => throw _privateConstructorUsedError;
+  List<String> get packages => throw _privateConstructorUsedError;
   int get appSizeInGB => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
@@ -37,11 +37,7 @@ abstract class $FotodeskSettingCopyWith<$Res> {
           FotodeskSetting value, $Res Function(FotodeskSetting) then) =
       _$FotodeskSettingCopyWithImpl<$Res, FotodeskSetting>;
   @useResult
-  $Res call(
-      {List<FotodeskPackage> packages,
-      int appSizeInGB,
-      int? id,
-      String? userId});
+  $Res call({List<String> packages, int appSizeInGB, int? id, String? userId});
 }
 
 /// @nodoc
@@ -66,7 +62,7 @@ class _$FotodeskSettingCopyWithImpl<$Res, $Val extends FotodeskSetting>
       packages: null == packages
           ? _value.packages
           : packages // ignore: cast_nullable_to_non_nullable
-              as List<FotodeskPackage>,
+              as List<String>,
       appSizeInGB: null == appSizeInGB
           ? _value.appSizeInGB
           : appSizeInGB // ignore: cast_nullable_to_non_nullable
@@ -91,11 +87,7 @@ abstract class _$$_FotodeskSettingCopyWith<$Res>
       __$$_FotodeskSettingCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {List<FotodeskPackage> packages,
-      int appSizeInGB,
-      int? id,
-      String? userId});
+  $Res call({List<String> packages, int appSizeInGB, int? id, String? userId});
 }
 
 /// @nodoc
@@ -118,7 +110,7 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
       packages: null == packages
           ? _value._packages
           : packages // ignore: cast_nullable_to_non_nullable
-              as List<FotodeskPackage>,
+              as List<String>,
       appSizeInGB: null == appSizeInGB
           ? _value.appSizeInGB
           : appSizeInGB // ignore: cast_nullable_to_non_nullable
@@ -139,7 +131,7 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_FotodeskSetting implements _FotodeskSetting {
   const _$_FotodeskSetting(
-      {required final List<FotodeskPackage> packages,
+      {required final List<String> packages,
       required this.appSizeInGB,
       this.id,
       this.userId})
@@ -148,9 +140,9 @@ class _$_FotodeskSetting implements _FotodeskSetting {
   factory _$_FotodeskSetting.fromJson(Map<String, dynamic> json) =>
       _$$_FotodeskSettingFromJson(json);
 
-  final List<FotodeskPackage> _packages;
+  final List<String> _packages;
   @override
-  List<FotodeskPackage> get packages {
+  List<String> get packages {
     if (_packages is EqualUnmodifiableListView) return _packages;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_packages);
@@ -201,7 +193,7 @@ class _$_FotodeskSetting implements _FotodeskSetting {
 
 abstract class _FotodeskSetting implements FotodeskSetting {
   const factory _FotodeskSetting(
-      {required final List<FotodeskPackage> packages,
+      {required final List<String> packages,
       required final int appSizeInGB,
       final int? id,
       final String? userId}) = _$_FotodeskSetting;
@@ -210,7 +202,7 @@ abstract class _FotodeskSetting implements FotodeskSetting {
       _$_FotodeskSetting.fromJson;
 
   @override
-  List<FotodeskPackage> get packages;
+  List<String> get packages;
   @override
   int get appSizeInGB;
   @override

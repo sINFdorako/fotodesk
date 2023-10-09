@@ -7,7 +7,6 @@ import 'package:fotodesk/core/features/notifications/presentation/widgets/notifi
 import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
 import 'package:fotodesk/features/admin_manager/data/datasources/local_data_source_am.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
-import 'package:fotodesk/features/authentification/domain/entities/fotodesk_setting.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/format_file_size.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 
@@ -19,14 +18,14 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  final List<FotodeskPackage> _selectedPackages = [];
+  final List<String> _selectedPackages = [];
+  final List<String> packages = ['gallery', 'crm', 'e-commerce', 'kanban'];
   int _appSizeInGB = 5; // default
   String? _apiKey = "";
   int? _applicationSize = 0;
 
   double _calculatePrice() {
-    double galleryPrice =
-        _selectedPackages.contains(FotodeskPackage.gallery) ? 3.99 : 0.0;
+    double galleryPrice = _selectedPackages.contains('gallery') ? 3.99 : 0.0;
     double crmPrice = 0.0;
     // _selectedPackages.contains(FotodeskPackage.crm) ? 19.99 : 0.0;
     double ecommercePrice = 0.0;
@@ -43,15 +42,15 @@ class SettingsPageState extends State<SettingsPage> {
         2)); // This will ensure the total is rounded to two decimal places
   }
 
-  String packageTitle(FotodeskPackage package) {
+  String packageTitle(String package) {
     switch (package) {
-      case FotodeskPackage.gallery:
+      case 'gallery':
         return 'Galerie';
-      case FotodeskPackage.crm:
+      case 'crm':
         return 'CRM';
-      case FotodeskPackage.ecommerce:
+      case 'e-commerce':
         return 'E-Commerce';
-      case FotodeskPackage.kanban:
+      case 'kanban':
         return 'Kanban';
       default:
         return '';
@@ -98,9 +97,11 @@ class SettingsPageState extends State<SettingsPage> {
         children: [
           Text('Ausgewählte Packete', style: textTheme.titleLarge),
           const SizedBox(height: 20),
-          ...FotodeskPackage.values.map((package) {
-            bool isGallery = package == FotodeskPackage.gallery;
-            _selectedPackages.add(FotodeskPackage.gallery);
+          ...packages.map((package) {
+            bool isGallery = package == 'gallery';
+            if (isGallery) {
+              _selectedPackages.add('gallery');
+            }
 
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -130,7 +131,7 @@ class SettingsPageState extends State<SettingsPage> {
                         ? Theme.of(context).colorScheme.primary
                         : Colors.grey),
                 title: Text(
-                  packageTitle(package),
+                  package, // Using package directly here.
                   style: TextStyle(
                       color: isGallery ? Colors.black : Colors.grey,
                       fontSize: 18,
@@ -142,7 +143,7 @@ class SettingsPageState extends State<SettingsPage> {
                     : null,
               ),
             );
-          }),
+          }).toList(),
           const Divider(),
           const SizedBox(height: 20),
           Column(

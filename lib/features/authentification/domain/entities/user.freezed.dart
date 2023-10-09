@@ -22,6 +22,10 @@ User _$UserFromJson(Map<String, dynamic> json) {
 mixin _$User {
   String get email => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
+  String? get company => throw _privateConstructorUsedError;
+  String? get position => throw _privateConstructorUsedError;
+  DateTime? get registered => throw _privateConstructorUsedError;
+  DateTime? get lastLogin => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
   UserRole? get role => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
@@ -37,7 +41,15 @@ abstract class $UserCopyWith<$Res> {
       _$UserCopyWithImpl<$Res, User>;
   @useResult
   $Res call(
-      {String email, String? password, int? id, UserRole? role, String? token});
+      {String email,
+      String? password,
+      String? company,
+      String? position,
+      DateTime? registered,
+      DateTime? lastLogin,
+      int? id,
+      UserRole? role,
+      String? token});
 }
 
 /// @nodoc
@@ -55,6 +67,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? email = null,
     Object? password = freezed,
+    Object? company = freezed,
+    Object? position = freezed,
+    Object? registered = freezed,
+    Object? lastLogin = freezed,
     Object? id = freezed,
     Object? role = freezed,
     Object? token = freezed,
@@ -68,6 +84,22 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String?,
+      company: freezed == company
+          ? _value.company
+          : company // ignore: cast_nullable_to_non_nullable
+              as String?,
+      position: freezed == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as String?,
+      registered: freezed == registered
+          ? _value.registered
+          : registered // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      lastLogin: freezed == lastLogin
+          ? _value.lastLogin
+          : lastLogin // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -91,7 +123,15 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String email, String? password, int? id, UserRole? role, String? token});
+      {String email,
+      String? password,
+      String? company,
+      String? position,
+      DateTime? registered,
+      DateTime? lastLogin,
+      int? id,
+      UserRole? role,
+      String? token});
 }
 
 /// @nodoc
@@ -105,6 +145,10 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   $Res call({
     Object? email = null,
     Object? password = freezed,
+    Object? company = freezed,
+    Object? position = freezed,
+    Object? registered = freezed,
+    Object? lastLogin = freezed,
     Object? id = freezed,
     Object? role = freezed,
     Object? token = freezed,
@@ -118,6 +162,22 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String?,
+      company: freezed == company
+          ? _value.company
+          : company // ignore: cast_nullable_to_non_nullable
+              as String?,
+      position: freezed == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as String?,
+      registered: freezed == registered
+          ? _value.registered
+          : registered // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      lastLogin: freezed == lastLogin
+          ? _value.lastLogin
+          : lastLogin // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -138,7 +198,15 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 @JsonSerializable()
 class _$_User implements _User {
   const _$_User(
-      {required this.email, this.password, this.id, this.role, this.token});
+      {required this.email,
+      this.password,
+      this.company,
+      this.position,
+      this.registered,
+      this.lastLogin,
+      this.id,
+      this.role,
+      this.token});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -146,6 +214,14 @@ class _$_User implements _User {
   final String email;
   @override
   final String? password;
+  @override
+  final String? company;
+  @override
+  final String? position;
+  @override
+  final DateTime? registered;
+  @override
+  final DateTime? lastLogin;
   @override
   final int? id;
   @override
@@ -155,7 +231,7 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(email: $email, password: $password, id: $id, role: $role, token: $token)';
+    return 'User(email: $email, password: $password, company: $company, position: $position, registered: $registered, lastLogin: $lastLogin, id: $id, role: $role, token: $token)';
   }
 
   @override
@@ -166,6 +242,13 @@ class _$_User implements _User {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
+            (identical(other.company, company) || other.company == company) &&
+            (identical(other.position, position) ||
+                other.position == position) &&
+            (identical(other.registered, registered) ||
+                other.registered == registered) &&
+            (identical(other.lastLogin, lastLogin) ||
+                other.lastLogin == lastLogin) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.token, token) || other.token == token));
@@ -173,8 +256,8 @@ class _$_User implements _User {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, email, password, id, role, token);
+  int get hashCode => Object.hash(runtimeType, email, password, company,
+      position, registered, lastLogin, id, role, token);
 
   @JsonKey(ignore: true)
   @override
@@ -194,6 +277,10 @@ abstract class _User implements User {
   const factory _User(
       {required final String email,
       final String? password,
+      final String? company,
+      final String? position,
+      final DateTime? registered,
+      final DateTime? lastLogin,
       final int? id,
       final UserRole? role,
       final String? token}) = _$_User;
@@ -204,6 +291,14 @@ abstract class _User implements User {
   String get email;
   @override
   String? get password;
+  @override
+  String? get company;
+  @override
+  String? get position;
+  @override
+  DateTime? get registered;
+  @override
+  DateTime? get lastLogin;
   @override
   int? get id;
   @override

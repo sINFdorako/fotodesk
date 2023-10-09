@@ -10,6 +10,10 @@ class User with _$User {
   const factory User({
     required String email,
     String? password,
+    String? company,
+    String? position,
+    DateTime? registered,
+    DateTime? lastLogin,
     int? id,
     UserRole? role,
     String? token,
