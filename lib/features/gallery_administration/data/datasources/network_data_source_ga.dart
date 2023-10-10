@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:fotodesk/core/network/dio_client.dart';
 import '../../domain/entities/category.dart';
@@ -93,7 +91,7 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<void> createImages(int categoryId, List<File> imageFiles) async {
+  Future<void> createImages(int categoryId, List<dynamic> imageFiles) async {
     try {
       List<MultipartFile> multiPartFiles = [];
 

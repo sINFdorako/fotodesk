@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/delete_categories.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/delete_images.dart';
+import 'package:fotodesk/features/gallery_administration/domain/usecases/get_all_images.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/update_category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -25,16 +24,33 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
   GalleryAdminCubit(this.galleryAdminRepository)
       : super(GalleryAdminState.initial());
 
+  acitvateLoading() {
+    emit(state.copyWith(isLoading: true));
+  }
+
+  deactivateLoading() {
+    emit(state.copyWith(isLoading: false));
+  }
+
   Future<void> getAllCategories() async {
     GetAllCategories getAllCategories =
         GetAllCategories(galleryAdminRepository);
     final Either<Failure, List<Category>> result =
         await getAllCategories.execute();
-    result.fold(
-      (failure) {},
-      (categoryList) => emit(state
-          .copyWith(categoryList: categoryList, selectedCategoriesMarked: [])),
-    );
+    result.fold((failure) {
+      // handle the failure
+    }, (categoryList) async {
+      // Using a map function to rebuild the list with updated categories
+      List<Category> updatedCategoryList =
+          await Future.wait(categoryList.map((category) async {
+        final int size = await getSizeOfCategory(category.id!);
+        return category.copyWith(size: size);
+      }).toList());
+
+      // Emit the updated category list
+      emit(state.copyWith(
+          categoryList: updatedCategoryList, selectedCategoriesMarked: []));
+    });
   }
 
   Future<void> deleteCategory(List<int> categoryIds) async {
@@ -90,9 +106,47 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
     });
   }
 
-  Future<void> uploadImages(Category category, List<File> imageFiles) async {
+  Future<int> getSizeOfAllImages() async {
+    GetAllImages getAllImages = GetAllImages(galleryAdminRepository);
+    final imagesOrFailure = await getAllImages.execute();
+
+    int totalSize = 0;
+
+    imagesOrFailure.fold((failure) {
+      // Handle the failure or simply return
+      return 0.0;
+    }, (images) {
+      totalSize = images.fold(0, (accumulatedSize, image) {
+        return accumulatedSize + (image.fileSize ?? 0);
+      });
+    });
+
+    return totalSize;
+  }
+
+  Future<int> getSizeOfCategory(int categoryId) async {
+    GetImageByCategoryId getImageByCategoryId =
+        GetImageByCategoryId(galleryAdminRepository);
+    final imagesOrFailure = await getImageByCategoryId.execute(categoryId);
+
+    int totalSize = 0;
+
+    imagesOrFailure.fold((failure) {
+      // Handle the failure or simply return
+      return 0.0;
+    }, (images) {
+      totalSize = images.fold(0, (accumulatedSize, image) {
+        return accumulatedSize + (image.fileSize ?? 0);
+      });
+    });
+
+    return totalSize;
+  }
+
+  Future<void> uploadImages(Category category, List<dynamic> imageFiles) async {
     CreateImages createImage = CreateImages(galleryAdminRepository);
     await createImage.execute(category.id!, imageFiles);
+    await getAllCategories();
 
     await setCategoryAsClicked(category);
   }

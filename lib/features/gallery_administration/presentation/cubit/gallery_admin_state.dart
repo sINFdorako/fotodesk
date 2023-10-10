@@ -7,6 +7,7 @@ class GalleryAdminState with _$GalleryAdminState {
       required final List<GalleryImage> imageList,
       required final List<Category> selectedCategoriesMarked,
       required final List<GalleryImage> selectedImagesMarked,
+      required bool isLoading,
       final Category? selectedCategoryClicked}) = _GalleryAdminState;
 
   factory GalleryAdminState.initial() {
@@ -16,6 +17,7 @@ class GalleryAdminState with _$GalleryAdminState {
       categoryList: [],
       imageList: [],
       selectedCategoryClicked: null,
+      isLoading: false,
     );
   }
 }

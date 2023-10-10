@@ -22,6 +22,7 @@ mixin _$GalleryAdminState {
       throw _privateConstructorUsedError;
   List<GalleryImage> get selectedImagesMarked =>
       throw _privateConstructorUsedError;
+  bool get isLoading => throw _privateConstructorUsedError;
   Category? get selectedCategoryClicked => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -40,6 +41,7 @@ abstract class $GalleryAdminStateCopyWith<$Res> {
       List<GalleryImage> imageList,
       List<Category> selectedCategoriesMarked,
       List<GalleryImage> selectedImagesMarked,
+      bool isLoading,
       Category? selectedCategoryClicked});
 
   $CategoryCopyWith<$Res>? get selectedCategoryClicked;
@@ -62,6 +64,7 @@ class _$GalleryAdminStateCopyWithImpl<$Res, $Val extends GalleryAdminState>
     Object? imageList = null,
     Object? selectedCategoriesMarked = null,
     Object? selectedImagesMarked = null,
+    Object? isLoading = null,
     Object? selectedCategoryClicked = freezed,
   }) {
     return _then(_value.copyWith(
@@ -81,6 +84,10 @@ class _$GalleryAdminStateCopyWithImpl<$Res, $Val extends GalleryAdminState>
           ? _value.selectedImagesMarked
           : selectedImagesMarked // ignore: cast_nullable_to_non_nullable
               as List<GalleryImage>,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       selectedCategoryClicked: freezed == selectedCategoryClicked
           ? _value.selectedCategoryClicked
           : selectedCategoryClicked // ignore: cast_nullable_to_non_nullable
@@ -114,6 +121,7 @@ abstract class _$$_GalleryAdminStateCopyWith<$Res>
       List<GalleryImage> imageList,
       List<Category> selectedCategoriesMarked,
       List<GalleryImage> selectedImagesMarked,
+      bool isLoading,
       Category? selectedCategoryClicked});
 
   @override
@@ -135,6 +143,7 @@ class __$$_GalleryAdminStateCopyWithImpl<$Res>
     Object? imageList = null,
     Object? selectedCategoriesMarked = null,
     Object? selectedImagesMarked = null,
+    Object? isLoading = null,
     Object? selectedCategoryClicked = freezed,
   }) {
     return _then(_$_GalleryAdminState(
@@ -154,6 +163,10 @@ class __$$_GalleryAdminStateCopyWithImpl<$Res>
           ? _value._selectedImagesMarked
           : selectedImagesMarked // ignore: cast_nullable_to_non_nullable
               as List<GalleryImage>,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
       selectedCategoryClicked: freezed == selectedCategoryClicked
           ? _value.selectedCategoryClicked
           : selectedCategoryClicked // ignore: cast_nullable_to_non_nullable
@@ -170,6 +183,7 @@ class _$_GalleryAdminState implements _GalleryAdminState {
       required final List<GalleryImage> imageList,
       required final List<Category> selectedCategoriesMarked,
       required final List<GalleryImage> selectedImagesMarked,
+      required this.isLoading,
       this.selectedCategoryClicked})
       : _categoryList = categoryList,
         _imageList = imageList,
@@ -211,11 +225,13 @@ class _$_GalleryAdminState implements _GalleryAdminState {
   }
 
   @override
+  final bool isLoading;
+  @override
   final Category? selectedCategoryClicked;
 
   @override
   String toString() {
-    return 'GalleryAdminState(categoryList: $categoryList, imageList: $imageList, selectedCategoriesMarked: $selectedCategoriesMarked, selectedImagesMarked: $selectedImagesMarked, selectedCategoryClicked: $selectedCategoryClicked)';
+    return 'GalleryAdminState(categoryList: $categoryList, imageList: $imageList, selectedCategoriesMarked: $selectedCategoriesMarked, selectedImagesMarked: $selectedImagesMarked, isLoading: $isLoading, selectedCategoryClicked: $selectedCategoryClicked)';
   }
 
   @override
@@ -231,6 +247,8 @@ class _$_GalleryAdminState implements _GalleryAdminState {
                 other._selectedCategoriesMarked, _selectedCategoriesMarked) &&
             const DeepCollectionEquality()
                 .equals(other._selectedImagesMarked, _selectedImagesMarked) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
             (identical(
                     other.selectedCategoryClicked, selectedCategoryClicked) ||
                 other.selectedCategoryClicked == selectedCategoryClicked));
@@ -243,6 +261,7 @@ class _$_GalleryAdminState implements _GalleryAdminState {
       const DeepCollectionEquality().hash(_imageList),
       const DeepCollectionEquality().hash(_selectedCategoriesMarked),
       const DeepCollectionEquality().hash(_selectedImagesMarked),
+      isLoading,
       selectedCategoryClicked);
 
   @JsonKey(ignore: true)
@@ -259,6 +278,7 @@ abstract class _GalleryAdminState implements GalleryAdminState {
       required final List<GalleryImage> imageList,
       required final List<Category> selectedCategoriesMarked,
       required final List<GalleryImage> selectedImagesMarked,
+      required final bool isLoading,
       final Category? selectedCategoryClicked}) = _$_GalleryAdminState;
 
   @override
@@ -269,6 +289,8 @@ abstract class _GalleryAdminState implements GalleryAdminState {
   List<Category> get selectedCategoriesMarked;
   @override
   List<GalleryImage> get selectedImagesMarked;
+  @override
+  bool get isLoading;
   @override
   Category? get selectedCategoryClicked;
   @override

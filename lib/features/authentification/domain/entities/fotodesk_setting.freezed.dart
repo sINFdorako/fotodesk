@@ -20,10 +20,12 @@ FotodeskSetting _$FotodeskSettingFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FotodeskSetting {
-  List<FotodeskPackage> get packages => throw _privateConstructorUsedError;
+  List<String> get packages => throw _privateConstructorUsedError;
   int get appSizeInGB => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
+  int? get userId => throw _privateConstructorUsedError;
+  int? get trialInMonths => throw _privateConstructorUsedError;
+  double? get pricePerMonth => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,10 +40,12 @@ abstract class $FotodeskSettingCopyWith<$Res> {
       _$FotodeskSettingCopyWithImpl<$Res, FotodeskSetting>;
   @useResult
   $Res call(
-      {List<FotodeskPackage> packages,
+      {List<String> packages,
       int appSizeInGB,
       int? id,
-      String? userId});
+      int? userId,
+      int? trialInMonths,
+      double? pricePerMonth});
 }
 
 /// @nodoc
@@ -61,12 +65,14 @@ class _$FotodeskSettingCopyWithImpl<$Res, $Val extends FotodeskSetting>
     Object? appSizeInGB = null,
     Object? id = freezed,
     Object? userId = freezed,
+    Object? trialInMonths = freezed,
+    Object? pricePerMonth = freezed,
   }) {
     return _then(_value.copyWith(
       packages: null == packages
           ? _value.packages
           : packages // ignore: cast_nullable_to_non_nullable
-              as List<FotodeskPackage>,
+              as List<String>,
       appSizeInGB: null == appSizeInGB
           ? _value.appSizeInGB
           : appSizeInGB // ignore: cast_nullable_to_non_nullable
@@ -78,7 +84,15 @@ class _$FotodeskSettingCopyWithImpl<$Res, $Val extends FotodeskSetting>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
+      trialInMonths: freezed == trialInMonths
+          ? _value.trialInMonths
+          : trialInMonths // ignore: cast_nullable_to_non_nullable
+              as int?,
+      pricePerMonth: freezed == pricePerMonth
+          ? _value.pricePerMonth
+          : pricePerMonth // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -92,10 +106,12 @@ abstract class _$$_FotodeskSettingCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<FotodeskPackage> packages,
+      {List<String> packages,
       int appSizeInGB,
       int? id,
-      String? userId});
+      int? userId,
+      int? trialInMonths,
+      double? pricePerMonth});
 }
 
 /// @nodoc
@@ -113,12 +129,14 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
     Object? appSizeInGB = null,
     Object? id = freezed,
     Object? userId = freezed,
+    Object? trialInMonths = freezed,
+    Object? pricePerMonth = freezed,
   }) {
     return _then(_$_FotodeskSetting(
       packages: null == packages
           ? _value._packages
           : packages // ignore: cast_nullable_to_non_nullable
-              as List<FotodeskPackage>,
+              as List<String>,
       appSizeInGB: null == appSizeInGB
           ? _value.appSizeInGB
           : appSizeInGB // ignore: cast_nullable_to_non_nullable
@@ -130,7 +148,15 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
+      trialInMonths: freezed == trialInMonths
+          ? _value.trialInMonths
+          : trialInMonths // ignore: cast_nullable_to_non_nullable
+              as int?,
+      pricePerMonth: freezed == pricePerMonth
+          ? _value.pricePerMonth
+          : pricePerMonth // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -139,18 +165,20 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_FotodeskSetting implements _FotodeskSetting {
   const _$_FotodeskSetting(
-      {required final List<FotodeskPackage> packages,
+      {required final List<String> packages,
       required this.appSizeInGB,
       this.id,
-      this.userId})
+      this.userId,
+      this.trialInMonths,
+      this.pricePerMonth})
       : _packages = packages;
 
   factory _$_FotodeskSetting.fromJson(Map<String, dynamic> json) =>
       _$$_FotodeskSettingFromJson(json);
 
-  final List<FotodeskPackage> _packages;
+  final List<String> _packages;
   @override
-  List<FotodeskPackage> get packages {
+  List<String> get packages {
     if (_packages is EqualUnmodifiableListView) return _packages;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_packages);
@@ -161,11 +189,15 @@ class _$_FotodeskSetting implements _FotodeskSetting {
   @override
   final int? id;
   @override
-  final String? userId;
+  final int? userId;
+  @override
+  final int? trialInMonths;
+  @override
+  final double? pricePerMonth;
 
   @override
   String toString() {
-    return 'FotodeskSetting(packages: $packages, appSizeInGB: $appSizeInGB, id: $id, userId: $userId)';
+    return 'FotodeskSetting(packages: $packages, appSizeInGB: $appSizeInGB, id: $id, userId: $userId, trialInMonths: $trialInMonths, pricePerMonth: $pricePerMonth)';
   }
 
   @override
@@ -177,13 +209,23 @@ class _$_FotodeskSetting implements _FotodeskSetting {
             (identical(other.appSizeInGB, appSizeInGB) ||
                 other.appSizeInGB == appSizeInGB) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.trialInMonths, trialInMonths) ||
+                other.trialInMonths == trialInMonths) &&
+            (identical(other.pricePerMonth, pricePerMonth) ||
+                other.pricePerMonth == pricePerMonth));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_packages), appSizeInGB, id, userId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_packages),
+      appSizeInGB,
+      id,
+      userId,
+      trialInMonths,
+      pricePerMonth);
 
   @JsonKey(ignore: true)
   @override
@@ -201,22 +243,28 @@ class _$_FotodeskSetting implements _FotodeskSetting {
 
 abstract class _FotodeskSetting implements FotodeskSetting {
   const factory _FotodeskSetting(
-      {required final List<FotodeskPackage> packages,
+      {required final List<String> packages,
       required final int appSizeInGB,
       final int? id,
-      final String? userId}) = _$_FotodeskSetting;
+      final int? userId,
+      final int? trialInMonths,
+      final double? pricePerMonth}) = _$_FotodeskSetting;
 
   factory _FotodeskSetting.fromJson(Map<String, dynamic> json) =
       _$_FotodeskSetting.fromJson;
 
   @override
-  List<FotodeskPackage> get packages;
+  List<String> get packages;
   @override
   int get appSizeInGB;
   @override
   int? get id;
   @override
-  String? get userId;
+  int? get userId;
+  @override
+  int? get trialInMonths;
+  @override
+  double? get pricePerMonth;
   @override
   @JsonKey(ignore: true)
   _$$_FotodeskSettingCopyWith<_$_FotodeskSetting> get copyWith =>

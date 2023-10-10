@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/features/gallery_administration/domain/repositories/gallery_admin_repository.dart';
 
@@ -11,7 +9,7 @@ class CreateImages {
   CreateImages(this.repository);
 
   Future<Either<Failure, void>> execute(
-      int categoryId, List<File> imageFiles) async {
+      int categoryId, List<dynamic> imageFiles) async {
     return await repository.createImages(categoryId, imageFiles);
   }
 }
