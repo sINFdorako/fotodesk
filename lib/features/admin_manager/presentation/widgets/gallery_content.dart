@@ -100,7 +100,10 @@ class GalleryContent {
             onPressed: () async {
               imageFiles = await PickFilesFromDesktop().pickMultipleImages();
               if (imageFiles != null) {
-                galleryAdminCubit.uploadImages(categoryClicked, imageFiles!);
+                galleryAdminCubit.acitvateLoading();
+                await galleryAdminCubit.uploadImages(
+                    categoryClicked, imageFiles!);
+                galleryAdminCubit.deactivateLoading();
               }
             },
           ),

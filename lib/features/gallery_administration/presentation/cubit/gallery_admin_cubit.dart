@@ -24,6 +24,14 @@ class GalleryAdminCubit extends Cubit<GalleryAdminState> {
   GalleryAdminCubit(this.galleryAdminRepository)
       : super(GalleryAdminState.initial());
 
+  acitvateLoading() {
+    emit(state.copyWith(isLoading: true));
+  }
+
+  deactivateLoading() {
+    emit(state.copyWith(isLoading: false));
+  }
+
   Future<void> getAllCategories() async {
     GetAllCategories getAllCategories =
         GetAllCategories(galleryAdminRepository);
