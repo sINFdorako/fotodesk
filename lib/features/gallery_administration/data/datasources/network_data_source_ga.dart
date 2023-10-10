@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fotodesk/core/network/dio_client.dart';
 import '../../domain/entities/category.dart';
@@ -96,7 +98,19 @@ class NetworkDataSourceGA {
       List<MultipartFile> multiPartFiles = [];
 
       for (final file in imageFiles) {
-        var multipartFile = await MultipartFile.fromFile(file.path);
+        MultipartFile multipartFile;
+
+        // If the file is an instance of File (non-web)
+        if (file is File) {
+          multipartFile = await MultipartFile.fromFile(file.path);
+        }
+        // If the file is bytes (web platform)
+        else if (file is List<int>) {
+          multipartFile = MultipartFile.fromBytes(file);
+        } else {
+          throw Exception('Unsupported file type');
+        }
+
         multiPartFiles.add(multipartFile);
       }
 
