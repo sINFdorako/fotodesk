@@ -23,7 +23,9 @@ mixin _$FotodeskSetting {
   List<String> get packages => throw _privateConstructorUsedError;
   int get appSizeInGB => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
+  int? get userId => throw _privateConstructorUsedError;
+  int? get trialInMonths => throw _privateConstructorUsedError;
+  double? get pricePerMonth => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +39,13 @@ abstract class $FotodeskSettingCopyWith<$Res> {
           FotodeskSetting value, $Res Function(FotodeskSetting) then) =
       _$FotodeskSettingCopyWithImpl<$Res, FotodeskSetting>;
   @useResult
-  $Res call({List<String> packages, int appSizeInGB, int? id, String? userId});
+  $Res call(
+      {List<String> packages,
+      int appSizeInGB,
+      int? id,
+      int? userId,
+      int? trialInMonths,
+      double? pricePerMonth});
 }
 
 /// @nodoc
@@ -57,6 +65,8 @@ class _$FotodeskSettingCopyWithImpl<$Res, $Val extends FotodeskSetting>
     Object? appSizeInGB = null,
     Object? id = freezed,
     Object? userId = freezed,
+    Object? trialInMonths = freezed,
+    Object? pricePerMonth = freezed,
   }) {
     return _then(_value.copyWith(
       packages: null == packages
@@ -74,7 +84,15 @@ class _$FotodeskSettingCopyWithImpl<$Res, $Val extends FotodeskSetting>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
+      trialInMonths: freezed == trialInMonths
+          ? _value.trialInMonths
+          : trialInMonths // ignore: cast_nullable_to_non_nullable
+              as int?,
+      pricePerMonth: freezed == pricePerMonth
+          ? _value.pricePerMonth
+          : pricePerMonth // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -87,7 +105,13 @@ abstract class _$$_FotodeskSettingCopyWith<$Res>
       __$$_FotodeskSettingCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<String> packages, int appSizeInGB, int? id, String? userId});
+  $Res call(
+      {List<String> packages,
+      int appSizeInGB,
+      int? id,
+      int? userId,
+      int? trialInMonths,
+      double? pricePerMonth});
 }
 
 /// @nodoc
@@ -105,6 +129,8 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
     Object? appSizeInGB = null,
     Object? id = freezed,
     Object? userId = freezed,
+    Object? trialInMonths = freezed,
+    Object? pricePerMonth = freezed,
   }) {
     return _then(_$_FotodeskSetting(
       packages: null == packages
@@ -122,7 +148,15 @@ class __$$_FotodeskSettingCopyWithImpl<$Res>
       userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
+      trialInMonths: freezed == trialInMonths
+          ? _value.trialInMonths
+          : trialInMonths // ignore: cast_nullable_to_non_nullable
+              as int?,
+      pricePerMonth: freezed == pricePerMonth
+          ? _value.pricePerMonth
+          : pricePerMonth // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -134,7 +168,9 @@ class _$_FotodeskSetting implements _FotodeskSetting {
       {required final List<String> packages,
       required this.appSizeInGB,
       this.id,
-      this.userId})
+      this.userId,
+      this.trialInMonths,
+      this.pricePerMonth})
       : _packages = packages;
 
   factory _$_FotodeskSetting.fromJson(Map<String, dynamic> json) =>
@@ -153,11 +189,15 @@ class _$_FotodeskSetting implements _FotodeskSetting {
   @override
   final int? id;
   @override
-  final String? userId;
+  final int? userId;
+  @override
+  final int? trialInMonths;
+  @override
+  final double? pricePerMonth;
 
   @override
   String toString() {
-    return 'FotodeskSetting(packages: $packages, appSizeInGB: $appSizeInGB, id: $id, userId: $userId)';
+    return 'FotodeskSetting(packages: $packages, appSizeInGB: $appSizeInGB, id: $id, userId: $userId, trialInMonths: $trialInMonths, pricePerMonth: $pricePerMonth)';
   }
 
   @override
@@ -169,13 +209,23 @@ class _$_FotodeskSetting implements _FotodeskSetting {
             (identical(other.appSizeInGB, appSizeInGB) ||
                 other.appSizeInGB == appSizeInGB) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.trialInMonths, trialInMonths) ||
+                other.trialInMonths == trialInMonths) &&
+            (identical(other.pricePerMonth, pricePerMonth) ||
+                other.pricePerMonth == pricePerMonth));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_packages), appSizeInGB, id, userId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_packages),
+      appSizeInGB,
+      id,
+      userId,
+      trialInMonths,
+      pricePerMonth);
 
   @JsonKey(ignore: true)
   @override
@@ -196,7 +246,9 @@ abstract class _FotodeskSetting implements FotodeskSetting {
       {required final List<String> packages,
       required final int appSizeInGB,
       final int? id,
-      final String? userId}) = _$_FotodeskSetting;
+      final int? userId,
+      final int? trialInMonths,
+      final double? pricePerMonth}) = _$_FotodeskSetting;
 
   factory _FotodeskSetting.fromJson(Map<String, dynamic> json) =
       _$_FotodeskSetting.fromJson;
@@ -208,7 +260,11 @@ abstract class _FotodeskSetting implements FotodeskSetting {
   @override
   int? get id;
   @override
-  String? get userId;
+  int? get userId;
+  @override
+  int? get trialInMonths;
+  @override
+  double? get pricePerMonth;
   @override
   @JsonKey(ignore: true)
   _$$_FotodeskSettingCopyWith<_$_FotodeskSetting> get copyWith =>

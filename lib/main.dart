@@ -8,9 +8,13 @@ import 'package:fotodesk/core/theme/custom_theme.dart';
 import 'package:fotodesk/features/admin_manager/data/datasources/network_data_source_am.dart';
 import 'package:fotodesk/features/admin_manager/data/repositories/admin_manager_repository_impl.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
+import 'package:fotodesk/features/authentification/data/datasources/network_data_source.dart';
+import 'package:fotodesk/features/authentification/data/repositories/auth_repository_impl.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 import 'package:fotodesk/features/gallery_administration/data/datasources/network_data_source_ga.dart';
 import 'package:fotodesk/features/gallery_administration/data/repositories/gallery_admin_repository_impl.dart';
+import 'package:timezone/data/latest_10y.dart';
+import 'package:timezone/timezone.dart';
 
 import 'core/di/injector.dart';
 import 'core/router/router.gr.dart';
@@ -21,13 +25,19 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   setupLocator();
 
+  initializeTimeZones();
+  var berlin = getLocation('Europe/Berlin');
+  setLocalLocation(berlin);
+
   //GalleryAdmin init
+  final networkDataSourceAuth = NetworkDataSource();
   final networkDataSourceGA = NetworkDataSourceGA();
   final networkDataSourceAM = NetworkDataSourceAM();
   final galleryAdminRepository =
       GalleryAdminRepositoryImpl(networkDataSourceGA);
   final adminManagerRepository =
       AdminManagerRepositoryImpl(networkDataSourceAM);
+  final authRepository = AuthRepositoryImpl(networkDataSourceAuth);
 
   runApp(
     EasyLocalization(
@@ -37,7 +47,7 @@ void main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => AuthCubit(),
+            create: (context) => AuthCubit(authRepository),
           ),
           BlocProvider(
             create: (context) => AdminManagerCubit(adminManagerRepository),

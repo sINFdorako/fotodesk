@@ -5,6 +5,8 @@ import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager
 import 'package:fotodesk/features/admin_manager/presentation/widgets/gallery_content.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/navbar_title.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/profile_menu.dart';
+import 'package:fotodesk/features/authentification/domain/entities/user.dart';
+import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 import '../../../gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 import 'navbar_button.dart';
 
@@ -42,6 +44,19 @@ class Navbar extends StatelessWidget {
   }
 
   Widget _sideNavbar(BuildContext context) {
+    List<String> packages = [];
+    if (context.read<AdminManagerCubit>().state.setting != null) {
+      packages = context.read<AdminManagerCubit>().state.setting!.packages;
+    }
+
+    UserRole? userRole;
+    bool superadmin = false;
+
+    if (context.read<AuthCubit>().state.user != null) {
+      userRole = context.read<AuthCubit>().state.user!.role;
+      superadmin = userRole == UserRole.superadmin;
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
@@ -64,31 +79,41 @@ class Navbar extends StatelessWidget {
             icon: Icons.home,
             navBarItem: NavBarItem.home,
           ),
-          const NavBarButton(
-            label: 'Chat',
-            icon: Icons.chat_bubble_outline_rounded,
-            navBarItem: NavBarItem.chat,
-          ),
-          const NavBarButton(
-            label: 'Ecommerce',
-            icon: Icons.shop,
-            navBarItem: NavBarItem.ecommerce,
-          ),
-          const NavBarButton(
-            label: 'Gallery',
-            icon: Icons.photo_album,
-            navBarItem: NavBarItem.gallery,
-          ),
-          const NavBarButton(
-            label: 'Customers',
-            icon: Icons.people,
-            navBarItem: NavBarItem.customers,
-          ),
-          const NavBarButton(
-            label: 'Calendar',
-            icon: Icons.calendar_month,
-            navBarItem: NavBarItem.calendar,
-          ),
+          packages.contains('gallery') || superadmin
+              ? const NavBarButton(
+                  label: 'Gallery',
+                  icon: Icons.photo_album,
+                  navBarItem: NavBarItem.gallery,
+                )
+              : Container(),
+          packages.contains('crm') || superadmin
+              ? const NavBarButton(
+                  label: 'Chat',
+                  icon: Icons.chat_bubble_outline_rounded,
+                  navBarItem: NavBarItem.chat,
+                )
+              : Container(),
+          packages.contains('e-commerce') || superadmin
+              ? const NavBarButton(
+                  label: 'Ecommerce',
+                  icon: Icons.shop,
+                  navBarItem: NavBarItem.ecommerce,
+                )
+              : Container(),
+          packages.contains('crm') || superadmin
+              ? const NavBarButton(
+                  label: 'Customers',
+                  icon: Icons.people,
+                  navBarItem: NavBarItem.customers,
+                )
+              : Container(),
+          packages.contains('crm') || superadmin
+              ? const NavBarButton(
+                  label: 'Calendar',
+                  icon: Icons.calendar_month,
+                  navBarItem: NavBarItem.calendar,
+                )
+              : Container(),
           SizedBox(height: 25.h),
           const NavBarButton(
             label: 'Logout',

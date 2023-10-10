@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/navbar.dart';
+import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 import 'package:fotodesk/features/ecommerce/presentation/ecommerce_page.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/pages/gallery_administration_page.dart';
 import 'package:fotodesk/features/generative_chat/presentation/pages/generative_chat.dart';
@@ -15,6 +16,13 @@ class AdminManagerPage extends StatefulWidget {
 }
 
 class _AdminManagerPageState extends State<AdminManagerPage> {
+  @override
+  void initState() {
+    context.read<AdminManagerCubit>().getFotodeskSettingByUser();
+    context.read<AuthCubit>().updateUserState();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedType = context.watch<AdminManagerCubit>().state.selectedType;

@@ -12,7 +12,9 @@ _$_FotodeskSetting _$$_FotodeskSettingFromJson(Map<String, dynamic> json) =>
           (json['packages'] as List<dynamic>).map((e) => e as String).toList(),
       appSizeInGB: json['appSizeInGB'] as int,
       id: json['id'] as int?,
-      userId: json['userId'] as String?,
+      userId: json['userId'] as int?,
+      trialInMonths: json['trialInMonths'] as int?,
+      pricePerMonth: (json['pricePerMonth'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$_FotodeskSettingToJson(_$_FotodeskSetting instance) =>
@@ -21,4 +23,6 @@ Map<String, dynamic> _$$_FotodeskSettingToJson(_$_FotodeskSetting instance) =>
       'appSizeInGB': instance.appSizeInGB,
       'id': instance.id,
       'userId': instance.userId,
+      'trialInMonths': instance.trialInMonths,
+      'pricePerMonth': instance.pricePerMonth,
     };

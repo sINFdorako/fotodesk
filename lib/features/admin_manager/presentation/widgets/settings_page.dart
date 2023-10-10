@@ -7,6 +7,9 @@ import 'package:fotodesk/core/features/notifications/presentation/widgets/notifi
 import 'package:fotodesk/core/features/ui/presentation/widgets/global_font_size.dart';
 import 'package:fotodesk/features/admin_manager/data/datasources/local_data_source_am.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
+import 'package:fotodesk/features/authentification/domain/entities/fotodesk_setting.dart';
+import 'package:fotodesk/features/authentification/domain/entities/user.dart';
+import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/format_file_size.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 
@@ -19,12 +22,10 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   final List<String> _selectedPackages = [];
-  final List<String> packages = ['gallery', 'crm', 'e-commerce', 'kanban'];
-  int _appSizeInGB = 5; // default
   String? _apiKey = "";
   int? _applicationSize = 0;
 
-  double _calculatePrice() {
+  double _calculatePrice(int appSizeInGB) {
     double galleryPrice = _selectedPackages.contains('gallery') ? 3.99 : 0.0;
     double crmPrice = 0.0;
     // _selectedPackages.contains(FotodeskPackage.crm) ? 19.99 : 0.0;
@@ -33,7 +34,7 @@ class SettingsPageState extends State<SettingsPage> {
     double kanbanPrice = 0.0;
     // _selectedPackages.contains(FotodeskPackage.kanban) ? 2.99 : 0.0;
 
-    double storagePrice = (_appSizeInGB - 1) * 0.25;
+    double storagePrice = (appSizeInGB - 1) * 0.25;
 
     double total =
         galleryPrice + crmPrice + ecommercePrice + kanbanPrice + storagePrice;
@@ -87,21 +88,61 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TextTheme textTheme = theme.textTheme;
+    final adminManangerCubit = context.read<AdminManagerCubit>();
+    List<String> packages = [];
+
+    FotodeskSetting fotodeskSetting =
+        const FotodeskSetting(packages: [], appSizeInGB: 0);
+
+    if (adminManangerCubit.state.setting != null) {
+      packages = adminManangerCubit.state.setting!.packages;
+      fotodeskSetting = adminManangerCubit.state.setting!;
+    }
+
+    final User? user = context.read<AuthCubit>().state.user;
     final adminManagerCubit = context.read<AdminManagerCubit>();
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          Text('Ausgewählte Packete', style: textTheme.titleLarge),
+          Text('Ausgewählte Packete', style: TextStyle(fontSize: FontUtil.h2)),
           const SizedBox(height: 20),
           ...packages.map((package) {
-            bool isGallery = package == 'gallery';
-            if (isGallery) {
-              _selectedPackages.add('gallery');
+            bool isAllowedPackage(String package) {
+              // Superadmin can access all
+              if (user?.role == UserRole.superadmin) return true;
+              // Gallery is always accessible
+              if (package == 'gallery') return true;
+              // Other packages are not accessible for regular users
+              return false;
             }
+
+            bool isSelectedPackage = _selectedPackages.contains(package);
+            if (isAllowedPackage(package) && !isSelectedPackage) {
+              _selectedPackages.add(package);
+            }
+
+            Color packageColor =
+                isAllowedPackage(package) ? Colors.black87 : Colors.grey;
+
+            IconData getIconForPackage(String package) {
+              if (package == 'gallery') return Icons.image;
+              if (package == 'crm') return Icons.person; // example icon for CRM
+              if (package == 'e-commerce') {
+                return Icons.shopping_cart; // example icon for e-commerce
+              }
+              if (package == 'kanban') {
+                return Icons.dashboard; // example icon for kanban
+              }
+              return Icons.block; // default
+            }
+
+            IconData packageIcon = getIconForPackage(package);
+
+            Color iconColor = isAllowedPackage(package)
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey;
 
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -110,115 +151,86 @@ class SettingsPageState extends State<SettingsPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
                 border: Border.all(
-                  color: isGallery
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.grey.shade300,
+                  color: packageColor,
                   width: 1.0,
                 ),
               ),
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: Icon(isGallery ? Icons.image : Icons.block,
-                    color: isGallery
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.grey),
+                leading: Icon(packageIcon, color: iconColor),
                 title: Text(
-                  package, // Using package directly here.
+                  packageTitle(package),
                   style: TextStyle(
-                      color: isGallery ? Colors.black : Colors.grey,
-                      fontSize: 18,
+                      color: packageColor,
+                      fontSize: FontUtil.button,
                       fontWeight: FontWeight.bold),
                 ),
-                trailing: isGallery
+                trailing: isSelectedPackage
                     ? Icon(Icons.check_box_outlined,
                         color: Theme.of(context).colorScheme.primary)
                     : null,
               ),
             );
           }).toList(),
+
           const Divider(),
-          const SizedBox(height: 20),
+          SizedBox(height: 32.h),
           Column(
             children: <Widget>[
-              Card(
-                elevation: 4.0, // adjust this for desired shadow depth
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0), // rounded corners
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0), // space inside the card
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.sd_storage, // Icon representing storage
-                                color: Theme.of(context)
-                                    .primaryColor, // Choose an appropriate color
-                                size: 24.0, // Adjust the size as needed
-                              ),
-                              const SizedBox(width: 8.0),
-                              Text(
-                                'Verfügbarer Speicher: $_appSizeInGB GB',
-                                style: TextStyle(fontSize: FontUtil.paragraph),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons
-                                    .folder_open, // Icon representing used storage
-                                color: Theme.of(context)
-                                    .primaryColor, // Choose an appropriate color
-                                size: 24.0, // Adjust the size as needed
-                              ),
-                              const SizedBox(width: 8.0),
-                              Text(
-                                'Genutzter Speicher: ${FormatFileSize().format(_applicationSize ?? 0)} ',
-                                style: TextStyle(fontSize: FontUtil.paragraph),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(
-                          height:
-                              10), // provides a bit of spacing between text and slider
-                      Slider(
-                        value: _appSizeInGB.toDouble(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            _appSizeInGB = newValue.toInt();
-                          });
-                        },
-                        min: 1,
-                        max: 50,
-                        divisions: 49,
-                        label: '$_appSizeInGB GB',
-                      ),
-                    ],
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0), // space inside the card
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.sd_storage, // Icon representing storage
+                              color: Theme.of(context)
+                                  .primaryColor, // Choose an appropriate color
+                              size: 24.0, // Adjust the size as needed
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              'Verfügbarer Speicher: ${fotodeskSetting.appSizeInGB} GB',
+                              style: TextStyle(fontSize: FontUtil.paragraph),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons
+                                  .folder_open, // Icon representing used storage
+                              color: Theme.of(context)
+                                  .primaryColor, // Choose an appropriate color
+                              size: 24.0, // Adjust the size as needed
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              'Genutzter Speicher: ${FormatFileSize().format(_applicationSize ?? 0)} ',
+                              style: TextStyle(fontSize: FontUtil.paragraph),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 32.h),
+                  ],
                 ),
               ),
               // ... other widgets if any ...
             ],
           ),
           const Divider(),
-          const SizedBox(height: 20),
-          Text('API Schlüssel', style: textTheme.titleLarge),
+          SizedBox(height: 32.h),
+          Text(
+            'API Schlüssel',
+            style: TextStyle(fontSize: FontUtil.h2),
+          ),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -227,7 +239,7 @@ class SettingsPageState extends State<SettingsPage> {
                 child: Text(
                   _apiKey == '' ? 'Kein API Schlüssel vorhanden' : _apiKey!,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.titleMedium,
+                  style: TextStyle(fontSize: FontUtil.button),
                 ),
               ),
               TextButton(
@@ -255,11 +267,12 @@ class SettingsPageState extends State<SettingsPage> {
                       : const Text('API Schlüssel erstellen')),
             ],
           ),
+          SizedBox(height: 32.h),
           const Divider(),
-          const SizedBox(height: 20),
+          SizedBox(height: 32.h),
           Text(
-            'Monatlicher Preis: ${_calculatePrice()} € ',
-            style: textTheme.titleLarge,
+            'Ihr individueller monatlicher Preis: ${fotodeskSetting.pricePerMonth} € ',
+            style: TextStyle(fontSize: FontUtil.paragraph),
           ),
           const SizedBox(height: 20),
           // ... add more settings as required.

@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AdminManagerState {
   NavBarItem get selectedType => throw _privateConstructorUsedError;
+  FotodeskSetting? get setting => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AdminManagerStateCopyWith<AdminManagerState> get copyWith =>
@@ -29,7 +30,9 @@ abstract class $AdminManagerStateCopyWith<$Res> {
           AdminManagerState value, $Res Function(AdminManagerState) then) =
       _$AdminManagerStateCopyWithImpl<$Res, AdminManagerState>;
   @useResult
-  $Res call({NavBarItem selectedType});
+  $Res call({NavBarItem selectedType, FotodeskSetting? setting});
+
+  $FotodeskSettingCopyWith<$Res>? get setting;
 }
 
 /// @nodoc
@@ -46,13 +49,30 @@ class _$AdminManagerStateCopyWithImpl<$Res, $Val extends AdminManagerState>
   @override
   $Res call({
     Object? selectedType = null,
+    Object? setting = freezed,
   }) {
     return _then(_value.copyWith(
       selectedType: null == selectedType
           ? _value.selectedType
           : selectedType // ignore: cast_nullable_to_non_nullable
               as NavBarItem,
+      setting: freezed == setting
+          ? _value.setting
+          : setting // ignore: cast_nullable_to_non_nullable
+              as FotodeskSetting?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $FotodeskSettingCopyWith<$Res>? get setting {
+    if (_value.setting == null) {
+      return null;
+    }
+
+    return $FotodeskSettingCopyWith<$Res>(_value.setting!, (value) {
+      return _then(_value.copyWith(setting: value) as $Val);
+    });
   }
 }
 
@@ -64,7 +84,10 @@ abstract class _$$_AdminManagerStateCopyWith<$Res>
       __$$_AdminManagerStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({NavBarItem selectedType});
+  $Res call({NavBarItem selectedType, FotodeskSetting? setting});
+
+  @override
+  $FotodeskSettingCopyWith<$Res>? get setting;
 }
 
 /// @nodoc
@@ -79,12 +102,17 @@ class __$$_AdminManagerStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? selectedType = null,
+    Object? setting = freezed,
   }) {
     return _then(_$_AdminManagerState(
       selectedType: null == selectedType
           ? _value.selectedType
           : selectedType // ignore: cast_nullable_to_non_nullable
               as NavBarItem,
+      setting: freezed == setting
+          ? _value.setting
+          : setting // ignore: cast_nullable_to_non_nullable
+              as FotodeskSetting?,
     ));
   }
 }
@@ -92,14 +120,17 @@ class __$$_AdminManagerStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AdminManagerState implements _AdminManagerState {
-  const _$_AdminManagerState({required this.selectedType});
+  const _$_AdminManagerState(
+      {required this.selectedType, required this.setting});
 
   @override
   final NavBarItem selectedType;
+  @override
+  final FotodeskSetting? setting;
 
   @override
   String toString() {
-    return 'AdminManagerState(selectedType: $selectedType)';
+    return 'AdminManagerState(selectedType: $selectedType, setting: $setting)';
   }
 
   @override
@@ -108,11 +139,12 @@ class _$_AdminManagerState implements _AdminManagerState {
         (other.runtimeType == runtimeType &&
             other is _$_AdminManagerState &&
             (identical(other.selectedType, selectedType) ||
-                other.selectedType == selectedType));
+                other.selectedType == selectedType) &&
+            (identical(other.setting, setting) || other.setting == setting));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectedType);
+  int get hashCode => Object.hash(runtimeType, selectedType, setting);
 
   @JsonKey(ignore: true)
   @override
@@ -123,11 +155,14 @@ class _$_AdminManagerState implements _AdminManagerState {
 }
 
 abstract class _AdminManagerState implements AdminManagerState {
-  const factory _AdminManagerState({required final NavBarItem selectedType}) =
-      _$_AdminManagerState;
+  const factory _AdminManagerState(
+      {required final NavBarItem selectedType,
+      required final FotodeskSetting? setting}) = _$_AdminManagerState;
 
   @override
   NavBarItem get selectedType;
+  @override
+  FotodeskSetting? get setting;
   @override
   @JsonKey(ignore: true)
   _$$_AdminManagerStateCopyWith<_$_AdminManagerState> get copyWith =>

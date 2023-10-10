@@ -68,9 +68,9 @@ class ProfileMenu extends StatelessWidget {
                 value: 2,
                 child: Row(
                   children: [
-                    Icon(Icons.settings), // Icon for the Einstellungen
+                    Icon(Icons.info), // Icon for the Einstellungen
                     SizedBox(width: 8.0),
-                    Text('Einstellungen'),
+                    Text('Fotodesk Pro Info'),
                   ],
                 ),
               ),
@@ -96,10 +96,14 @@ class ProfileMenu extends StatelessWidget {
                         return CustomDialog(
                             width: 600.w,
                             height: 600.h,
-                            title: const Text('Einstellungen'),
+                            title: const Text('Fotodesk Pro Info'),
                             content: const SettingsPage(),
                             actions: [
-                              CustomButton(label: 'Speichern', onPressed: () {})
+                              CustomButton(
+                                  label: 'Schließen',
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  })
                             ]);
                       });
                   break;

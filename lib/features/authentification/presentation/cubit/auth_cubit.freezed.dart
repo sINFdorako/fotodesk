@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AuthState {
   bool get isLight => throw _privateConstructorUsedError;
+  User? get user => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AuthStateCopyWith<AuthState> get copyWith =>
@@ -28,7 +29,9 @@ abstract class $AuthStateCopyWith<$Res> {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
       _$AuthStateCopyWithImpl<$Res, AuthState>;
   @useResult
-  $Res call({bool isLight});
+  $Res call({bool isLight, User? user});
+
+  $UserCopyWith<$Res>? get user;
 }
 
 /// @nodoc
@@ -45,13 +48,30 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   @override
   $Res call({
     Object? isLight = null,
+    Object? user = freezed,
   }) {
     return _then(_value.copyWith(
       isLight: null == isLight
           ? _value.isLight
           : isLight // ignore: cast_nullable_to_non_nullable
               as bool,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserCopyWith<$Res>? get user {
+    if (_value.user == null) {
+      return null;
+    }
+
+    return $UserCopyWith<$Res>(_value.user!, (value) {
+      return _then(_value.copyWith(user: value) as $Val);
+    });
   }
 }
 
@@ -62,7 +82,10 @@ abstract class _$$_AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
       __$$_AuthStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLight});
+  $Res call({bool isLight, User? user});
+
+  @override
+  $UserCopyWith<$Res>? get user;
 }
 
 /// @nodoc
@@ -77,12 +100,17 @@ class __$$_AuthStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLight = null,
+    Object? user = freezed,
   }) {
     return _then(_$_AuthState(
       isLight: null == isLight
           ? _value.isLight
           : isLight // ignore: cast_nullable_to_non_nullable
               as bool,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
     ));
   }
 }
@@ -90,14 +118,16 @@ class __$$_AuthStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AuthState implements _AuthState {
-  const _$_AuthState({required this.isLight});
+  const _$_AuthState({required this.isLight, required this.user});
 
   @override
   final bool isLight;
+  @override
+  final User? user;
 
   @override
   String toString() {
-    return 'AuthState(isLight: $isLight)';
+    return 'AuthState(isLight: $isLight, user: $user)';
   }
 
   @override
@@ -105,11 +135,12 @@ class _$_AuthState implements _AuthState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AuthState &&
-            (identical(other.isLight, isLight) || other.isLight == isLight));
+            (identical(other.isLight, isLight) || other.isLight == isLight) &&
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isLight);
+  int get hashCode => Object.hash(runtimeType, isLight, user);
 
   @JsonKey(ignore: true)
   @override
@@ -119,10 +150,13 @@ class _$_AuthState implements _AuthState {
 }
 
 abstract class _AuthState implements AuthState {
-  const factory _AuthState({required final bool isLight}) = _$_AuthState;
+  const factory _AuthState(
+      {required final bool isLight, required final User? user}) = _$_AuthState;
 
   @override
   bool get isLight;
+  @override
+  User? get user;
   @override
   @JsonKey(ignore: true)
   _$$_AuthStateCopyWith<_$_AuthState> get copyWith =>
