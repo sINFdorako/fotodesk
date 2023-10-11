@@ -5,10 +5,13 @@ import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fotodesk/features/gallery_administration/domain/entities/file_pick_info.dart';
+import 'package:fotodesk/features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 
 class PickFilesFromDesktop {
-  Future<List<FilePickInfo>?> pickMultipleImages() async {
+  Future<List<FilePickInfo>?> pickMultipleImages(BuildContext context) async {
     List<FilePickInfo> pickedFiles = [];
 
     // Check if dart:io is available and Platform.isMacOS is true
@@ -25,6 +28,7 @@ class PickFilesFromDesktop {
       );
 
       if (result != null) {
+        context.read<GalleryAdminCubit>().acitvateLoading();
         for (final file in result.files) {
           Uint8List bytesData = File(file.path!).readAsBytesSync();
           Duration estimatedTime = _calculateUploadTime(bytesData.length);
@@ -47,12 +51,15 @@ class PickFilesFromDesktop {
       // Web platform: use native HTML file picker
       final completer = Completer<List<FilePickInfo>>();
 
+      // restrict here for image/png only at first
       final uploadInput = html.FileUploadInputElement()
+        ..accept = '.jpg, .jpeg, .png'
         ..multiple = true
         ..draggable = true
         ..click();
 
       uploadInput.onChange.listen((event) {
+        context.read<GalleryAdminCubit>().acitvateLoading();
         final files = uploadInput.files;
         if (files != null && files.isNotEmpty) {
           for (final file in files) {

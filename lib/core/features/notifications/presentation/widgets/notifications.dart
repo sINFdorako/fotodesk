@@ -106,8 +106,13 @@ class Notifications with ElegantNotificationMixin {
 
   Notifications(this.context);
 
-  void showError(String description) {
+  void showError({
+    required String description,
+    Duration? toastDuration,
+  }) {
+    toastDuration ??= const Duration(milliseconds: 7000);
     _showElegantNotification(
+      toastDuration: toastDuration,
       description: description,
       type: ElegantNotificationType.error,
     );
