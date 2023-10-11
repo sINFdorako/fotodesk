@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fotodesk/core/features/notifications/presentation/widgets/notifications.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/animations/switch_in_switch_out.dart';
 import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/navbar_title.dart';
 import 'package:fotodesk/features/gallery_administration/domain/entities/category.dart';
+import 'package:fotodesk/features/gallery_administration/domain/entities/file_pick_info.dart';
 import 'package:fotodesk/features/gallery_administration/domain/entities/gallery_image.dart';
 import 'package:fotodesk/features/gallery_administration/domain/usecases/pick_files_from_desktop.dart';
 import 'package:fotodesk/features/gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
@@ -90,7 +92,7 @@ class GalleryContent {
     }
 
     if (categoryClicked != null && imagesMarked.isEmpty) {
-      List<dynamic>? imageFiles;
+      List<FilePickInfo>? imageFiles;
       children.add(
         SwitchInSwitchOut(
           key: const ValueKey('uploadButton'),
@@ -100,10 +102,42 @@ class GalleryContent {
             onPressed: () async {
               imageFiles = await PickFilesFromDesktop().pickMultipleImages();
               if (imageFiles != null) {
+                List<Duration?> allDurations = imageFiles!
+                    .map((info) => info.estimatedUploadTime)
+                    .toList();
+                Duration totalEstimatedTime = _sumDurations(allDurations);
+
                 galleryAdminCubit.acitvateLoading();
+
+                String estimatedTimeString = totalEstimatedTime.inSeconds < 60
+                    ? '${totalEstimatedTime.inSeconds} Sekunden'
+                    : '${totalEstimatedTime.inMinutes} Minuten';
+
+                String picturesAreBeingUploaded = imageFiles!.length > 1
+                    ? '${imageFiles!.length} Bilder werden hochgeladen'
+                    : '${imageFiles!.length} Bild wird hochgeladen';
+
+                if (totalEstimatedTime.inSeconds > 0) {
+                  Notifications(context).showInfo(
+                      customDescription: Column(
+                        children: [
+                          Text(
+                              '$picturesAreBeingUploaded. Es wird ca. $estimatedTimeString dauern.'),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const CircularProgressIndicator()
+                        ],
+                      ),
+                      toastDuration: totalEstimatedTime);
+                }
+
                 await galleryAdminCubit.uploadImages(
                     categoryClicked, imageFiles!);
+
                 galleryAdminCubit.deactivateLoading();
+
+                Notifications(context).dismissCurrentNotification();
               }
             },
           ),
@@ -189,5 +223,14 @@ class GalleryContent {
       alignment: Alignment.centerLeft,
       child: Row(children: children),
     );
+  }
+
+  Duration _sumDurations(List<Duration?> durations) {
+    if (durations.isNotEmpty) {
+      int totalSeconds =
+          durations.fold(0, (sum, duration) => sum + duration!.inSeconds);
+      return Duration(seconds: totalSeconds);
+    }
+    return const Duration();
   }
 }
