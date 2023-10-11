@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,12 @@ import 'package:fotodesk/core/features/ui/presentation/widgets/screen_size.dart'
 enum ElegantNotificationType { success, error, info }
 
 mixin ElegantNotificationMixin {
+  Completer<void>? _dismissCompleter;
+
+  void dismissCurrentNotification() {
+    _dismissCompleter?.complete();
+  }
+
   BuildContext get context;
 
   ElegantNotification _configureElegantNotification({
@@ -16,6 +24,7 @@ mixin ElegantNotificationMixin {
     required double height,
     required String description,
     required ElegantNotificationType type,
+    Widget? customDescription,
   }) {
     final colorMap = {
       ElegantNotificationType.success: Colors.green[400],
@@ -46,14 +55,20 @@ mixin ElegantNotificationMixin {
       animation: ScreenSize.isMobile(context)
           ? AnimationType.fromBottom
           : AnimationType.fromRight,
-      description: Text(
-        description,
-        style: TextStyle(
-          fontSize: FontUtil.notification,
-          color: Theme.of(context).colorScheme.onBackground,
-        ),
-      ),
+      description: customDescription ??
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: FontUtil.notification,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
       onDismiss: () {},
+      onActionPressed: () {
+        if (!_dismissCompleter!.isCompleted) {
+          _dismissCompleter!.complete();
+        }
+      },
       icon: Icon(
         iconData,
         color: colorMap[type],
@@ -67,6 +82,7 @@ mixin ElegantNotificationMixin {
     Duration? toastDuration,
     double? width,
     double? height,
+    Widget? customDescription,
   }) {
     width ??= 360.w;
     height ??= 100.h;
@@ -77,6 +93,7 @@ mixin ElegantNotificationMixin {
       height: height,
       toastDuration: toastDuration,
       description: description,
+      customDescription: customDescription,
       type: type,
     );
     notification.show(context);
@@ -104,21 +121,23 @@ class Notifications with ElegantNotificationMixin {
   }
 
   void showInfo({
-    required String description,
+    String? description,
     Duration? toastDuration,
     double? width,
     double? height,
+    Widget? customDescription,
   }) {
     width ??= 360.w;
     height ??= 100.h;
     toastDuration ??= const Duration(milliseconds: 5000);
 
     _showElegantNotification(
-      description: description,
+      description: description ?? '',
       type: ElegantNotificationType.info,
       toastDuration: toastDuration,
       width: width,
       height: height,
+      customDescription: customDescription,
     );
   }
 }

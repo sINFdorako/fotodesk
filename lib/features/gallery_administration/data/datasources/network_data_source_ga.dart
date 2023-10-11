@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fotodesk/core/network/dio_client.dart';
+import 'package:fotodesk/features/gallery_administration/domain/entities/file_pick_info.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/entities/gallery_image.dart';
+import 'package:http_parser/http_parser.dart';
 
 class NetworkDataSourceGA {
   final Dio _dio = DioClient().fotoDeskApi;
@@ -93,22 +95,36 @@ class NetworkDataSourceGA {
     }
   }
 
-  Future<void> createImages(int categoryId, List<dynamic> imageFiles) async {
+  Future<void> createImages(
+      int categoryId, List<FilePickInfo> imageFiles) async {
     try {
       List<MultipartFile> multiPartFiles = [];
 
-      for (final file in imageFiles) {
+      bool isDesktopPlatform = false;
+      try {
+        isDesktopPlatform =
+            Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+      } catch (e) {}
+
+      for (final fileInfo in imageFiles) {
         MultipartFile multipartFile;
 
-        // If the file is an instance of File (non-web)
-        if (file is File) {
-          multipartFile = await MultipartFile.fromFile(file.path);
-        }
-        // If the file is bytes (web platform)
-        else if (file is List<int>) {
-          multipartFile = MultipartFile.fromBytes(file);
+        if (isDesktopPlatform) {
+          if (fileInfo.file == null) {
+            throw Exception('File object is null for desktop upload');
+          }
+          multipartFile = await MultipartFile.fromFile(fileInfo.file!.path,
+              filename: fileInfo.name);
         } else {
-          throw Exception('Unsupported file type');
+          // Other platforms (mobile or web)
+          if (fileInfo.bytes == null || fileInfo.name == null) {
+            throw Exception(
+                'File bytes or name is null for non-desktop upload');
+          }
+          List<String> type = fileInfo.mimeType!.split('/');
+          multipartFile = MultipartFile.fromBytes(fileInfo.bytes!,
+              filename: fileInfo.name,
+              contentType: MediaType(type[0], type[1]));
         }
 
         multiPartFiles.add(multipartFile);
@@ -127,6 +143,7 @@ class NetworkDataSourceGA {
         throw Exception('Failed to create image');
       }
     } catch (error) {
+      print(error);
       throw Exception('Failed to create image: $error');
     }
   }

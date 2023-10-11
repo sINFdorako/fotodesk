@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fotodesk/core/errors/failures.dart';
+import 'package:fotodesk/features/gallery_administration/domain/entities/file_pick_info.dart';
 
 import '../../domain/entities/category.dart';
 import '../../domain/entities/gallery_image.dart';
@@ -70,7 +71,8 @@ class GalleryAdminRepositoryImpl implements GalleryAdminRepository {
   Future<Either<Failure, void>> createImages(
       int categoryId, List<dynamic> imageFile) async {
     try {
-      await networkDataSourceGA.createImages(categoryId, imageFile);
+      await networkDataSourceGA.createImages(
+          categoryId, imageFile as List<FilePickInfo>);
       return const Right(unit);
     } catch (error) {
       return Left(ServerFailure());
