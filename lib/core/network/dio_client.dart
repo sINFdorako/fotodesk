@@ -11,7 +11,9 @@ class DioClient {
       BaseOptions(
         baseUrl: 'https://backend.fotogalerie-wolfram-wildner.de',
         connectTimeout: const Duration(seconds: 10), // 10s
-        receiveTimeout: const Duration(seconds: 7), // 7s
+        receiveTimeout: const Duration(
+            minutes:
+                24), // ~12min time to upload 100mb, assuming slow connection or sth. we double it
         headers: {
           'Content-Type': 'application/json',
         },

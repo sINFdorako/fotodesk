@@ -35,7 +35,7 @@ class UserInfoPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${user?.prename ?? 'Unbekannt'}${user?.surname ?? ''}',
+                  Text('${user?.prename ?? 'Unbekannt'} ${user?.surname ?? ''}',
                       style: textTheme.headlineSmall),
                   const SizedBox(height: 5),
                   Text(user?.email ?? 'Unbekannte Email',

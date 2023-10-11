@@ -221,7 +221,8 @@ class _LoginPageState extends State<LoginPage> {
                     // Checking if the response contains a successful user login
                     response.fold(
                       (failure) {
-                        Notifications(context).showError('Fehler beim Login');
+                        Notifications(context)
+                            .showError(description: 'Fehler beim Login');
                       },
                       (user) {
                         Notifications(context)
