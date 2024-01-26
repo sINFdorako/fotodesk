@@ -49,6 +49,9 @@ class NavBarButtonState extends State<NavBarButton> {
               case NavBarItem.gallery:
                 adminManagerCubit.selectNavBarItem(NavBarItem.gallery);
                 break;
+              case NavBarItem.landingPage:
+                adminManagerCubit.selectNavBarItem(NavBarItem.landingPage);
+                break;
               case NavBarItem.customers:
                 adminManagerCubit.selectNavBarItem(NavBarItem.customers);
                 break;
@@ -71,7 +74,7 @@ class NavBarButtonState extends State<NavBarButton> {
               alignment: Alignment.centerRight,
               child: Container(
                 width: double.infinity,
-                height: 60.h, // fixed height
+                height: 45.h, // fixed height
                 decoration: BoxDecoration(
                   color: isHovering || isSelected
                       ? Theme.of(context).scaffoldBackgroundColor
@@ -87,7 +90,7 @@ class NavBarButtonState extends State<NavBarButton> {
                     color: isHovering || isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Colors.white, // Check both conditions
-                    size: 27.5.w,
+                    size: 22.5.w,
                   ),
                 ),
               ),

@@ -19,13 +19,13 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 200, maxWidth: 400),
+      constraints: const BoxConstraints(minWidth: 200, maxWidth: 500),
       child: TextField(
         controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: 15.w, horizontal: 12.w), // Adjust as required
+              vertical: 13.w, horizontal: 10.w), // Adjust as required
           hintStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: FontUtil.hint,

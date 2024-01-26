@@ -32,6 +32,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   timezone: ^0.9.2
   shimmer: ^3.0.0
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,7 @@ flutter:
   assets:
     - assets/localization/en.json
     - assets/localization/de.json
+    - assets/images/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

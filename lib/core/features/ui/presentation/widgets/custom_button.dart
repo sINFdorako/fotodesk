@@ -10,15 +10,17 @@ class CustomButton extends StatelessWidget {
   final IconData? iconData;
   final bool? isColor;
   final Color? customFontColor;
+  final Color? customFillColor;
 
   const CustomButton(
       {super.key,
       required this.label,
       required this.onPressed,
-      this.width = 45,
-      this.height = 50,
+      this.width = 35,
+      this.height = 42,
       this.iconData,
       this.isColor,
+      this.customFillColor,
       this.customFontColor});
 
   @override
@@ -27,14 +29,16 @@ class CustomButton extends StatelessWidget {
       child: OutlinedButton(
         style: ButtonStyle(
           minimumSize: MaterialStateProperty.all(
-            Size(width.w, height.h),
+            Size(width, height),
           ),
           foregroundColor: MaterialStateProperty.all((isColor ?? false)
               ? Theme.of(context).colorScheme.primary
               : Colors.transparent), // Optional text color
-          backgroundColor: MaterialStateProperty.all((isColor ?? false)
-              ? Theme.of(context).colorScheme.primary.withOpacity(.3)
-              : Colors.transparent), // Optional background color
+          backgroundColor: MaterialStateProperty.all(
+            (isColor ?? false)
+                ? Theme.of(context).colorScheme.primary.withOpacity(.3)
+                : (customFillColor ?? Colors.transparent),
+          ), // Optional background color
           overlayColor: MaterialStateProperty.resolveWith<Color?>(
             (Set<MaterialState> states) {
               if (states.contains(MaterialState.hovered)) {
@@ -60,9 +64,9 @@ class CustomButton extends StatelessWidget {
               Icon(
                 iconData,
                 color: Theme.of(context).colorScheme.primary,
-                size: 20.w,
+                size: 17.5.w,
               ),
-            if (iconData != null) SizedBox(width: 8.0.w),
+            if (iconData != null) SizedBox(width: 6.5.w),
             Text(
               label,
               style: TextStyle(

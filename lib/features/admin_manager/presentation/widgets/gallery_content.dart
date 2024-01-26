@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class GalleryContent {
               List<String> categoryNamesToDelete =
                   categoriesMarked.map((category) => category.name).toList();
               String contentText =
-                  'Sind sie sicher dass sie die Kateogorien: ${categoryNamesToDelete.join(', ')} löschen möchten?';
+                  'Sind sie sicher dass sie die Kategorien: ${categoryNamesToDelete.join(', ')} löschen möchten?';
               ConfirmDeleteDialog().dialog(context, contentText, () {
                 galleryAdminCubit.deleteCategory(idsToDelete);
               });
@@ -104,8 +105,16 @@ class GalleryContent {
             iconData: Icons.upload,
             label: 'Bilder hochladen',
             onPressed: () async {
-              imageFiles =
-                  await PickFilesFromDesktop().pickMultipleImages(context);
+              /// Recognise platform
+              if (Platform.isMacOS || Platform.isWindows) {
+                imageFiles =
+                    await PickFilesFromDesktop().pickMultipleImages(context);
+              } else {
+                // Assume Web
+                // imageFiles =
+                //     await PickFilesFromWeb().pickMultipleImages(context);
+              }
+
               if (imageFiles != null) {
                 List<Uint8List?> uploadSizeList =
                     imageFiles!.map((info) => info.bytes).toList();

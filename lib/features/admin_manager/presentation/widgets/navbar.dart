@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fotodesk/core/features/ui/presentation/widgets/custom_button.dart';
 import 'package:fotodesk/features/admin_manager/presentation/cubit/admin_manager_cubit.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/gallery_content.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/navbar_title.dart';
 import 'package:fotodesk/features/admin_manager/presentation/widgets/profile_menu.dart';
 import 'package:fotodesk/features/authentification/domain/entities/user.dart';
 import 'package:fotodesk/features/authentification/presentation/cubit/auth_cubit.dart';
+import 'package:fotodesk/features/crm/presentation/widgets/add_new_customer.dart';
 import '../../../gallery_administration/presentation/cubit/gallery_admin_cubit.dart';
 import 'navbar_button.dart';
 
 enum NavBarItem {
   home,
   gallery,
+  landingPage,
   customers,
   calendar,
   help,
@@ -86,20 +89,26 @@ class Navbar extends StatelessWidget {
                   navBarItem: NavBarItem.gallery,
                 )
               : Container(),
-          packages.contains('crm') || superadmin
+          packages.contains('gallery') || superadmin
               ? const NavBarButton(
-                  label: 'Chat',
-                  icon: Icons.chat_bubble_outline_rounded,
-                  navBarItem: NavBarItem.chat,
-                )
+                  label: 'Gallery',
+                  icon: Icons.pages,
+                  navBarItem: NavBarItem.landingPage)
               : Container(),
-          packages.contains('e-commerce') || superadmin
-              ? const NavBarButton(
-                  label: 'Ecommerce',
-                  icon: Icons.shop,
-                  navBarItem: NavBarItem.ecommerce,
-                )
-              : Container(),
+          // packages.contains('crm') || superadmin
+          //     ? const NavBarButton(
+          //         label: 'Chat',
+          //         icon: Icons.chat_bubble_outline_rounded,
+          //         navBarItem: NavBarItem.chat,
+          //       )
+          //     : Container(),
+          // packages.contains('e-commerce') || superadmin
+          //     ? const NavBarButton(
+          //         label: 'Ecommerce',
+          //         icon: Icons.shop,
+          //         navBarItem: NavBarItem.ecommerce,
+          //       )
+          //     : Container(),
           packages.contains('crm') || superadmin
               ? const NavBarButton(
                   label: 'Customers',
@@ -168,6 +177,8 @@ class Navbar extends StatelessWidget {
       content = _chatContent(context);
     } else if (selected == NavBarItem.ecommerce) {
       content = _eCommerceContent(context);
+    } else if (selected == NavBarItem.customers) {
+      content = _customersContent(context);
     } else {
       content = _defaultContent(context);
     }
@@ -216,6 +227,23 @@ class Navbar extends StatelessWidget {
       key: ValueKey('ecommerce'),
       alignment: Alignment.centerLeft,
       child: NavbarTitle(title: 'Ecommerce Anbindung'),
+    );
+  }
+
+  Widget _customersContent(BuildContext context) {
+    return Align(
+      key: const ValueKey('customers'),
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          const NavbarTitle(title: 'Kundenbeziehungsmanagement'),
+          const Spacer(),
+          CustomButton(
+            label: 'Kunde Anlegen',
+            onPressed: () async => {await addNewCustomer(context)},
+          )
+        ],
+      ),
     );
   }
 }

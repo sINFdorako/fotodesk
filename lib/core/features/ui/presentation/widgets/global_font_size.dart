@@ -6,13 +6,13 @@ class FontUtil {
   static double get h2 => _ensureMinSize(20.sp, 18);
 
   // Paragraph
-  static double get paragraph => _ensureMinSize(15.sp, 14);
+  static double get paragraph => _ensureMinSize(13.5.sp, 12);
 
   // Buttons
-  static double get button => _ensureMinSize(13.sp, 11);
+  static double get button => _ensureMinSize(11.sp, 10);
 
   // Hint or subdued text
-  static double get hint => _ensureMinSize(13.sp, 11);
+  static double get hint => _ensureMinSize(11.sp, 10);
 
   static double get notification => _ensureMinSize(13.sp, 11);
 
